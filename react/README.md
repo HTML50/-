@@ -635,3 +635,68 @@ ReactDOM.render(
 
 `tick()`中有`this.setState()`是用来更新state内容的，`componentDidMount`中还有箭头函数。*容我消化消化*
 
+
+
+2016年11月18日
+
+继续这一节的内容，没有实际的例子，实在不易懂。
+
+不论如何，上面的例子，从写法上又比之前的例子结构清晰、逻辑明确了，同时渲染结果正确地显示了每一秒的时间变化。
+
+观察代码，可以发现。首先这是一个类的形式的component，它含有两个React的原生方法`componentDidMount()`和`componentWillUnmount()`。第二个方法清除定时器暂时还没使用。最后是`tick()`内的`setState()`方法，从字面上看这就可以看出是设定更新state的。
+
+
+
+正确使用state，有三个要点。
+
+1.不能直接修改state。直接修改内容并不能使component重绘。
+
+```jsx
+// Wrong
+this.state.comment = 'Hello';
+// Correct
+this.setState({comment: 'Hello'});
+```
+
+2.setState有时是异步的，更新`counter`时需要使用`prevState`
+
+```jsx
+// Wrong
+this.setState({
+  counter: this.state.counter + this.props.increment,
+});
+// Correct
+this.setState((prevState, props) => ({
+  counter: prevState.counter + props.increment
+}));
+```
+
+3.使用`setState`更新State时，可以单独设置每一个参数。比如state内有两个参数：
+
+```jsx
+constructor(props) {
+    super(props);
+    this.state = {
+      posts: [],
+      comments: []
+    };
+  }
+```
+
+可以分开：
+
+```jsx
+  componentDidMount() {
+    fetchPosts().then(response => {
+      this.setState({
+        posts: response.posts
+      });
+    });
+
+    fetchComments().then(response => {
+      this.setState({
+        comments: response.comments
+      });
+    });
+  }
+```
