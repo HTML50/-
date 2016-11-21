@@ -700,3 +700,114 @@ constructor(props) {
     });
   }
 ```
+
+
+2016年11月21日
+
+过了个周末，再看上面的箭头函数又看不懂了~
+
+```jsx
+response => {
+      this.setState({
+        posts: response.posts
+      });
+    }
+```
+
+再复习一下：
+
+箭头函数相当于匿名函数
+
+```javascript
+'use strict';
+//只有一个参数
+
+x => x*x;
+//等同于
+function(x){
+  return x*x;
+}
+
+//没有参数
+() => '此时没参数'
+//等同于
+function(){
+  return '此时没参数';
+}
+
+//多个参数
+(x,y) => x+y;
+//等同于
+function(x,y){
+  return x,y;
+}
+```
+
+
+
+那怎么执行箭头函数呢？和执行匿名函数的方法是一样的。
+
+第一种方法，用括号包住，再紧跟`()`执行。
+
+```javascript
+'use strict';
+//普通匿名
+;(function (){
+alert('我是匿名函数测试')
+})
+();
+
+//箭头函数
+;(()=>alert('我是箭头函数测试'))();
+```
+
+第二种方法，将匿名函数赋值给变量，调用变量执行函数。
+
+```javascript
+'use strict';
+//普通匿名
+var b = function(){
+alert('我是匿名函数')
+}
+b();
+
+//箭头函数
+var a=() => alert('箭头函数 \\(^o^)/')
+a();
+```
+
+那么，带有参数的匿名函数如何调用？
+
+```javascript
+'use strict';
+var c = function(x){
+  return x*x;
+}
+console.log(c(6))
+
+//箭头
+var d = x => x*x;
+console.log(d(7))
+```
+
+我觉得调用含参的匿名函数不好记住写法，太拗口了，但是从匿名函数推算过来还是可以记住的。
+
+
+
+好了，至此，最上面的那个`response`箭头函数，就是。。。还是看不太懂，response不是函数参数的名字么。为何函数里面反而调用了`response.posts`。我觉得这一定跟React的机制有关，后面肯定会遇到。暂且跳过。
+
+
+
+### Handling Events
+
+https://facebook.github.io/react/docs/handling-events.html
+
+___
+
+在React中处理事件的方式与原生DOM是类似的。
+
+有两点不同：
+
+- React事件使用驼峰命名法`camelCase`。
+- ​
+
