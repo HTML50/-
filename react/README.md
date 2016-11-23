@@ -804,10 +804,56 @@ https://facebook.github.io/react/docs/handling-events.html
 
 ___
 
-在React中处理事件的方式与原生DOM是类似的。
+在React中处理事件Event的方式与原生DOM是类似的。
 
 有两点不同：
 
 - React事件使用驼峰命名法`camelCase`。
-- ​
 
+- 事件名是React中函数的写法，用{}括住。
+
+
+普通的HTML
+
+```html
+<button onclick="activateLasers()">
+  Activate Lasers
+</button>
+```
+
+JSX写法
+
+```jsx
+<button onClick={activateLasers}>
+  Activate Lasers
+</button>
+```
+
+还有一点不同的是，在React中无法使用`return false`来阻止默认行为，只能使用`e.preventDefault()`，在HTML里可以这样写：
+
+```html
+<a href="#" onclick="console.log('The link was clicked.'); return false">
+  Click me
+</a>
+```
+
+React是这样的：
+
+```jsx
+function ActionLink() {
+  function handleClick(e) {
+    e.preventDefault();
+    console.log('The link was clicked.');
+  }
+
+  return (
+    <a href="#" onClick={handleClick}>
+      Click me
+    </a>
+  );
+}
+```
+
+
+
+2016年11月23日
