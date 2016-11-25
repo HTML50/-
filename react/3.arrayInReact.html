@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="js/react.js"></script>
+  <script src='js/react-dom.js'></script>
+  <script src="js/browser.min.js"></script>
+</head>
+<body>
+  <div id='demo'></div>
+  <script type='text/babel'>
+  var arr = ['test1','test2','test3'];
+  var arrJSX = [
+  <h1>test1</h1>,
+  <h1>test2</h1>
+  ]
+  ReactDOM.render(
+  <div>{arr}{arrJSX}</div>,
+    document.getElementById('demo')
+  );
+  </script>
+</body>
+</html>

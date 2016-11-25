@@ -856,4 +856,95 @@ function ActionLink() {
 
 
 
-2016年11月23日
+2016年11月24日
+
+接下来又给出了使用ES6的类的方法来写event handler。
+
+(暂停分割线)
+
+___
+
+
+
+*感觉看的太快了，内容记不住，看了些JS基础知识。*
+
+*比如都说React是MVC中的V，我去研究了一下MVC对于前端来讲是怎么回事，看了几篇说的都很笼统，只明白了MVC各代表什么。*
+
+*JS中关于Object内容的写法方法很多，新学了一个`:`的方法，有点像JSON但不一样。看来写代码跟写作文一样，都要多看别人的东西。*
+
+
+
+自己又动手写了一个hello world，还巩固记忆。实践的时候发现，要引入3个js文件，分别是`react.js`， `react-dom.js`， `browser.min.js`。同时，需要在HTML中指定一个元素作为React的容器，这时能体会到React负责的只是一个块中的内容。
+
+*1.helloWorld.html*
+
+```jsx
+<div id='demo'></div>
+  <script type='text/babel'>
+  ReactDOM.render(
+    <h1>Hello, World</h1>,
+    document.getElementById('demo')
+  );
+  </script>
+```
+
+
+
+2016年11月25日
+
+继续手写代码。写一个遍历输出数组的JSX，写这个时发现，JSX语法与javaScript不兼容的地方。我本想简单输出数组内的内容，没有写`<div>`，然后就开始报错。与源码反复对比，没有错误的地方。最后才明白，JSX的写法就是要带上标签，没有标签，就识别不了。同样，函数`return`的内容也是标准的JSX语法格式，要带有标签。我把之前的Hello Wolrd代码中标签去掉，就报错了。
+
+顺便学习了一下数组的map方法，刚开始看到map以为是ES6中的新增方法，专门研究了一下，没有与数组这样搭配的用法。然后想到这是数组的方法，搜了个文档学了学。
+
+*2.arrayOutput.html*
+
+```jsx
+var arr = ['test1','test2','test3'];
+  ReactDOM.render(
+  <div>
+	{
+	arr.map(function (str){
+	 return <h1>hello,{str}</h1>
+	})
+	}</div>,
+    document.getElementById('demo')
+  );
+```
+
+这样写会有一个警告`Warning: Each child in an array or iterator should have a unique "key" prop. Check the top-level render call using <div>. See https://fb.me/react-warning-keys for more information.`意思是应该给数组中的子元素独立的prop，不过不影响输出。
+
+
+
+*3.arrayInReact.html*
+
+```jsx
+ var arr = ['test1','test2','test3'];
+  var arrJSX = [
+  <h1>test1</h1>,
+  <h1>test2</h1>
+  ]
+  ReactDOM.render(
+  <div>{arr}{arrJSX}</div>,
+    document.getElementById('demo')
+  );
+```
+
+如果在React中直接将数组名放在花括号中，则会直接输出所有的数组内容。同样的，数组定义也可以使用JSX语法。注意标签要闭合，前后一致。不然会报错`Uncaught SyntaxError: embedded: Unterminated JSX contents`。
+
+
+
+*4.helloComponent.html*
+
+```jsx
+var HelloComponent = React.createClass({
+  render: function() {
+  return <h1>Component Msg: {this.props.test}</h1>;
+  }
+  })
+  ReactDOM.render(
+  <HelloComponent test="I'm good" />,
+  document.getElementById('demo')
+  );
+```
+
+用`createClass`方法建立的Component有点类似JS中Object中`:`的方法。Component首字母必须大写。

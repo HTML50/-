@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="js/react.js"></script>
+  <script src='js/react-dom.js'></script>
+  <script src="js/browser.min.js"></script>
+</head>
+<body>
+  <div id='demo'></div>
+  <script type='text/babel'>
+  var arr = ['test1','test2','test3'];
+  ReactDOM.render(
+  <div>
+	{
+	arr.map(function (str){
+	 return <h1>hello,{str}</h1>
+	})
+	}</div>,
+    document.getElementById('demo')
+  );
+  </script>
+</body>
+</html>

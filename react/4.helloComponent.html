@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="js/react.js"></script>
+  <script src='js/react-dom.js'></script>
+  <script src="js/browser.min.js"></script>
+</head>
+<body>
+  <div id='demo'></div>
+  <script type='text/babel'>
+  var HelloComponent = React.createClass({
+  render: function() {
+  return <h1>Component Msg: {this.props.test}</h1>;
+  }
+  })
+  ReactDOM.render(
+  <HelloComponent test="I'm good" />,
+  document.getElementById('demo')
+  );
+  </script>
+</body>
+</html>
