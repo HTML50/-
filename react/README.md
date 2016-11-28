@@ -936,15 +936,60 @@ var arr = ['test1','test2','test3'];
 *4.helloComponent.html*
 
 ```jsx
-var HelloComponent = React.createClass({
+ var HelloComponent = React.createClass({
   render: function() {
-  return <h1>Component Msg: {this.props.test}</h1>;
+  return <h1>Component Msg: {this.props.test},{this.props.msg}</h1>;
   }
-  })
+  });
   ReactDOM.render(
-  <HelloComponent test="I'm good" />,
+  <HelloComponent test="I'm good" msg="this is a test" />,
   document.getElementById('demo')
-  );
+  )
 ```
 
 用`createClass`方法建立的Component有点类似JS中Object中`:`的方法。Component首字母必须大写。
+
+
+
+2016年11月28日
+
+(React继续分割线)
+
+___
+
+*今天脑子里出现个问题：既然React写出来最终还是要转化为JS来让浏览器理解，那它的优势在哪里？看了一些文章，讲的是React自身有更新DOM的方法，能比原生JS效率更高。*
+
+由于学习的实例再往下就是新内容了，还是拐回来看官方文档。紧接着Event Handler说，除了写成function的形式，还可以写成类的形式：
+
+```jsx
+class Toggle extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {isToggleOn : true};
+    
+    //必要的绑定(binding)
+    this.handleClick = this.handleClick.bind(this)
+  }
+
+  handleClick() {
+    this.setState(prevState => ({
+      isToggleOn: !prevState.isToggleOn;
+    }));
+  }
+
+  render(){
+    return (
+      <button onclick={this.handleClick} />
+      {this.state.isToggleOn ? 'ON' : 'OFF'}
+      </button>
+    )
+  }
+}
+
+ReactDOM.render(
+	<Toggle />,
+	document.getElementById('root')
+);
+```
+
+这段代码是生成一个可以改变状态的按钮，点击按钮改变内容。用的是ES6中class来定义的，需要注意的是，在constructor中`bind(this)`的操作，

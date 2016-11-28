@@ -10,11 +10,11 @@
   <script type='text/babel'>
   var HelloComponent = React.createClass({
   render: function() {
-  return <h1>Component Msg: {this.props.test}</h1>;
+  return <h1>Component Msg: {this.props.test},{this.props.msg}</h1>;
   }
-  })
+  });
   ReactDOM.render(
-  <HelloComponent test="I'm good" />,
+  <HelloComponent test="I'm good" msg="this is a test" />,
   document.getElementById('demo')
   );
   </script>
