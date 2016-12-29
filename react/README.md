@@ -1,4 +1,4 @@
-# react学习笔记 11月
+### Preventing Component from Renderingreact学习笔记 11月
 
 ## https://facebook.github.io/react/docs/hello-world.html
 
@@ -649,7 +649,7 @@ ReactDOM.render(
 
 正确使用state，有三个要点。
 
-1.不能直接修改state。直接修改内容并不能使component重绘。
+1.不能直接修改state。直接修改内容并不能使component重绘，要使用`setState`。
 
 ```jsx
 // Wrong

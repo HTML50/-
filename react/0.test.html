@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="js/react.js"></script>
+	<script src='js/react-dom.js'></script>
+	<script src="js/browser.min.js"></script>
+</head>
+<body>
+	<script type='text/babel'>
+
+function Button1(){
+	return <button>btnTrue</button>
+}
+function Button2(){
+	return <button>btnFalse</button>
+}
+
+	function RenderText(props){
+		return(
+
+			<h1>{props.isLoggedIn?(
+				<Button1 />
+				):(
+				<Button2 />
+				)}</h1>
+
+			)
+	}
+	
+	ReactDOM.render(
+	<RenderText isLoggedIn={false}/>,
+	document.body
+	);
+	
+	
+	</script>
+</body>
+</html>
