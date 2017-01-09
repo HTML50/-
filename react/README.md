@@ -1,6 +1,6 @@
-### Preventing Component from Renderingreact学习笔记 11月
+#Preventing Component from Renderingreact学习笔记 11月
 
-## https://facebook.github.io/react/docs/hello-world.html
+
 
 2016年11月14日
 
@@ -63,7 +63,7 @@ ReactDOM.render(
 );
 ```
 
-JSX写法怪怪的，可以不加双引号包裹内容，element就是一个JSX的声明。这段代码是为了展示如何使用JSX语法来输出变量，使用花括号，{ function or variable }来输出变量。
+JSX写法与html不太相同，写多了就习惯了。element是一个JSX的变量声明。这段代码是为了展示如何使用JSX语法来输出变量，使用花括号，{ function or variable }来输出变量。
 
 
 

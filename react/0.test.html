@@ -1,38 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<script src="js/react.js"></script>
-	<script src='js/react-dom.js'></script>
-	<script src="js/browser.min.js"></script>
+<script src="js/react.js"></script>
+<script src='js/react-dom.js'></script>
+<script src="js/browser.min.js"></script>
 </head>
 <body>
-	<script type='text/babel'>
+<div id='root'></div>
+<script type='text/babel'>
 
-function Button1(){
-	return <button>btnTrue</button>
+
+function List(props){
+const number=props.number;
+const list  = number.map(x=><li key={x}>{x}</li>)
+return (
+<ul>{list}</ul>
+)
 }
-function Button2(){
-	return <button>btnFalse</button>
-}
 
-	function RenderText(props){
-		return(
 
-			<h1>{props.isLoggedIn?(
-				<Button1 />
-				):(
-				<Button2 />
-				)}</h1>
 
-			)
-	}
-	
-	ReactDOM.render(
-	<RenderText isLoggedIn={false}/>,
-	document.body
-	);
-	
-	
-	</script>
+const numbers = [1,2,3,4,5]
+
+ReactDOM.render(
+<List number={numbers} />,
+document.getElementById('root')
+)
+
+
+
+
+
+
+</script>
 </body>
 </html>

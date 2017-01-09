@@ -6,7 +6,7 @@
 
 
 
-## Conditional Rendering
+### Conditional Rendering
 
 https://facebook.github.io/react/docs/conditional-rendering.html
 
@@ -213,4 +213,54 @@ function Button2(){
 12月30日
 
 ## Preventing Component from Rendering
+
+有时需要隐藏一个Component，只要在代码中给出`return null`即可。
+
+下列代码`<WarningBanner />`的渲染基于prop的`warn`的值，如果为false，则不渲染。
+
+```JSX
+function WarningBanner(props){
+  if(!props.warn){
+    return null;
+  }
+  
+  return (
+  	<div>
+    Warning!
+    </div>
+  );
+}
+
+class Page extends React.Component{
+  constructor(props){
+    super(props);
+    this.state={showWarning:true};
+    this.handleToggleClick = this.handleToggleClick.bind(this);
+  }
+  
+  handleToggleClick(){
+    this.setState(prevState => ({
+      showWarning:!prevState.showWarning;
+    }));
+  }
+  
+  render(){
+    return (
+    <div>
+      <WarningBanner warn={this.state.showWarning} />
+        <button onClick = {this.handleToggleClick}>
+        {this.state.showWarning ? 'Hide' : 'Show'}
+        </button>
+      </div>
+    )
+  }
+}
+
+ReactDOM.render(
+  <Page />,
+  document.getElementById('root')
+);
+```
+
+
 
