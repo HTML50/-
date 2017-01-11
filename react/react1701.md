@@ -276,3 +276,231 @@ const sidebar=(
 
 也会报错，应该是=后直接跟变量，就不需要加`{}`了。
 
+
+
+1月11日
+
+keys是React内部的一个参数，只用于React操作，是无法传递给Component，呈现在渲染出来的结构中的。使用Chrome的F12功能，并且下载React插件，拿上面的content片段为例，可以看到，如果一个Component只有Keys值，得到的结果如下：
+
+> <div>		($r in the console)
+>
+> ___
+>
+> key "1"
+>
+> ___
+>
+> Props read-only
+>
+> children: Array[2]
+>
+> 0: {...}
+>
+> 1: {..}
+
+属性中，只有相应的元素，如果将content代码段改为如下，增加一个id：
+
+```jsx
+ const content=(
+   {props.posts.map(post=>
+  <div key={post.id} id={post.id}>
+      <h3>{post.title}</h3> 
+      <p>{post.content}</p>
+   </div>)}
+)
+```
+
+这时从F12工具可观察到
+> <div>		($r in the console)
+>
+> ___
+>
+> **key** "1"
+>
+> ___
+>
+> **Props** read-only
+>
+> children: Array[2]
+>
+>  -0: {...}
+>
+>  -1: {..}
+>
+> id: 1
+
+属性中多了一个id的内容。
+
+如果想传递原始数据的id或者其他内容到Component，光设定keys是不行的，可以自行添加其他字段。
+
+
+
+### Embedding map() in JSX 
+
+前面的代码中在变量定义中使用了map函数
+
+```jsx
+const listItems = numbers.map((number) =>
+    <ListItem key={number.toString()}
+              value={number} />
+  );
+```
+
+在jsx语法中，一个Component的return里，`{}`内可以使用任意的表达式（上面这个只在其中放了变量），比如：
+
+```jsx
+function NumberList(props) {
+  const numbers = props.numbers;
+  return (
+    <ul>
+      {numbers.map((number) =>
+        <ListItem key={number.toString()}
+                  value={number} />
+      )}
+    </ul>
+  );
+}
+```
+
+`const variable`是可以直接跟变量的，加`{}`反倒不行，而在`return`里，必须加`{}`才能识别变量。
+
+
+
+### Forms
+
+https://facebook.github.io/react/docs/forms.html
+
+------
+
+HTML中的表单是这样的
+
+```html
+<form>
+  <label>
+    Name:
+    <input type="text" name="name" />
+  </label>
+  <input type="submit" value="Submit" />
+</form>
+```
+
+点击提交，会把name的值传递给下一个页面。在React中，更常见的做法是使用一个handle function来处理提交的事件，叫做"controlled components"。
+
+
+
+###Controlled Components
+
+HTML中的Form，如`<input> <select> <textarea>`等均有自己实现状态改变与更新的方法。在React中，Form的中的值均由`state`属性保存，并且使用`setState()`更新。input值由这样方法控制的Component就叫做“controlled component”。
+
+例如，React中的Form可以这样写：
+
+```jsx
+class Form extends React.Component{
+  constructor(props){
+    super(props);
+    this.state={value:''};
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  
+  handleChange(event){
+    this.setState({value:event.target.value})
+  }
+  
+  handleSubmit(event){
+    alert('the name is '+this.state.value);
+    event.preventDefault();
+  }
+  
+  render(){
+    return(
+      <form onSubmit={this.handleSubmit}>
+        <label>
+        Name:
+          <input type='text' value={this.state.value} onChange={this.handleChange} />
+        </label>
+      <input type='submit' value='submit' />
+      </form>
+    )
+  }
+}
+```
+
+这个逻辑跟JS是一样的，只不过换了一种方法，用`state`作为中间值来连接事件和数据更新。
+
+
+
+### The textarea Tag 
+
+在HTML中，textarea的内容是这样定义的：
+
+```jsx
+<textarea>
+  Hello there, this is some text in a text area
+</textarea>
+```
+
+在React中有所区别，内容也放在`value`中，和操作`<input>`的方法是一致的：
+
+```jsx
+render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Name:
+          <textarea value={this.state.value} onChange={this.handleChange} />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+    );
+  }
+```
+
+
+
+### The select Tag
+
+同样的，React中对于`<select>`也是采取统一、简便的处理方法。（代码都一样，我直接复制了）
+
+```jsx
+class FlavorForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: 'coconut'};
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
+
+  handleSubmit(event) {
+    alert('Your favorite flavor is: ' + this.state.value);
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Pick your favorite La Croix flavor:
+          <select value={this.state.value} onChange={this.handleChange}>
+            <option value="grapefruit">Grapefruit</option>
+            <option value="lime">Lime</option>
+            <option value="coconut">Coconut</option>
+            <option value="mango">Mango</option>
+          </select>
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+    );
+  }
+}
+```
+
+也有个叫“Uncontrolled Components”的模式，很简单，暂时略过不研究。
+
+
+
