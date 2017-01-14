@@ -527,3 +527,77 @@ for(x=1;x<=100,i++){
 下午继续想，看了不少文章，说的最多的就是新规范里面的Promise。好像直接写没有什么可借鉴的经验，js的单线程机制貌似也不允许这样。日后再想想。
 
 最后说到线程阻塞，我想知道alert能不能阻塞ajax，做实验发现。是可以的，阻塞发生时，浏览器对当前页面线程的js代码都不解释了。
+
+
+
+1月13日
+
+(不务正业分割线)
+
+___
+
+
+6种primitive数据类型
+
+- [Boolean](https://developer.mozilla.org/en-US/docs/Glossary/Boolean)
+- [Null](https://developer.mozilla.org/en-US/docs/Glossary/Null)
+- [Undefined](https://developer.mozilla.org/en-US/docs/Glossary/Undefined)
+- [Number](https://developer.mozilla.org/en-US/docs/Glossary/Number)
+- [String](https://developer.mozilla.org/en-US/docs/Glossary/String)
+- [Symbol](https://developer.mozilla.org/en-US/docs/Glossary/Symbol) (new in ECMAScript 6)
+
+
+
+其中，`typeof(null)`得到的是object。
+
+为什么，网上有人问 ：
+
+> If `null` is a primitive, why does `typeof(null)` return `"object"`?
+
+答案是：
+
+> Because [the spec says so](http://www.ecma-international.org/ecma-262/5.1/#sec-11.4.3).
+
+
+
+仔细研究这几个类型还是很有意思的。比如：
+
+```javascript
+var num = Number(123);
+var num1 = 123;
+var num2 = new Number(123)
+var num3 = new Number(123)
+
+
+console.log(typeof(num));
+console.log(typeof(num2));
+
+console.log(num === num1);		//true
+console.log(num1 === num2);		//false
+console.log(num2 == num3);		//false
+```
+
+
+
+
+
+这些都是上午看关于不同类型数据比较时学到的，规范文档中的规则也挺拗口，不太容易记。比如：
+
+```javascript
+console.log(null==undefined)		//true
+```
+
+
+
+当然还有意外：
+
+```javascript
+console.log(!Boolean == false);		//true
+console.log(!Boolean == true);		//false
+console.log(Boolean == true);		//false
+console.log(Boolean == false);		//false
+```
+
+这是因为typeof(Boolean)是function，根据NOT(`!`)运算符的规则，对于Object类型，转化为Boolean的值是true。所以这里的!Boolean就应该是false。是NOT`!`在这里起到的转化作用。
+
+对于`==`的比较，规范中没有提到function类型的比较，我估计应该按照Object的规则应用，也就是说大部分结果都是false。
