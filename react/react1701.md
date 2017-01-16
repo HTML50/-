@@ -601,3 +601,61 @@ console.log(Boolean == false);		//false
 这是因为typeof(Boolean)是function，根据NOT(`!`)运算符的规则，对于Object类型，转化为Boolean的值是true。所以这里的!Boolean就应该是false。是NOT`!`在这里起到的转化作用。
 
 对于`==`的比较，规范中没有提到function类型的比较，我估计应该按照Object的规则应用，也就是说大部分结果都是false。
+
+
+
+1月16日
+
+上午复习了一下冒泡排序。发现如果在纸上写，很容易就会出现错误，太依赖调试了，需要多看些算法，锻炼逻辑。
+
+### Lifting State Up
+
+https://facebook.github.io/react/docs/lifting-state-up.html
+
+___
+
+通常情况下，多个Component会控制同一个数据区域，这时需要lift state up，将共享的state放到最接近的公共ancestor中去。
+
+在本例中，我们将写一个温度计算器，来计算给定的温度是否能让水沸腾。
+
+首先，创建一个BoilingVerdict，接收温度作为prop，返回是否沸腾。
+
+```jsx
+function BoilingVerdict(props){
+  if(props.temperature>=100){
+    return <p>水沸腾了！</p>;
+  }
+  return <p>水还不太热！</p>;
+}
+```
+
+然后，写一个Caculator，用于渲染input接收输入，然后用state来保存，并通过上面的BoilingVerdict输出结果。
+
+```jsx
+class Caculator extends React.Component{
+  constructor(props){
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.state ={value:''};
+  }
+  
+  handleChange(e){
+    this.setState({value:e.target.value})
+  }
+  
+  render(){
+    const value = this.state.value;
+    return(
+    <div>
+      <input type='text' value={value} onChange={this.handleChange} />
+        <BoilingVerdict temperature={parseInt(value)} />
+      </div>
+    )
+  }
+}
+```
+
+
+
+### Adding a Second Input 
+

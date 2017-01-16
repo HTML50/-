@@ -9,44 +9,39 @@
 <div id='root'></div>
 <script type='text/babel'>
 
-class FlavorForm extends React.Component {
-  constructor(props) {
+
+function BoilingVerdict(props){
+  if(props.temperature>=100){
+    return <p>水沸腾了！</p>;
+  }
+  return <p>水还不太热！</p>;
+}
+
+
+class Caculator extends React.Component{
+  constructor(props){
     super(props);
-    this.state = {value: 'coconutsb'};
-
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.state ={value:''};
   }
-
-  handleChange(event) {
-    this.setState({value: event.target.value});
+  
+  handleChange(e){
+    this.setState({value:e.target.value})
   }
-
-  handleSubmit(event) {
-    alert('Your favorite flavor is: ' + this.state.value);
-    event.preventDefault();
-  }
-
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Pick your favorite La Croix flavor:
-          <select value={this.state.value} onChange={this.handleChange}>
-            <option value="grapefruit">Grapefruit</option>
-            <option value="lime">Lime</option>
-            <option value="coconut">Coconut</option>
-            <option value="mango">Mango</option>
-          </select>
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
-    );
+  
+  render(){
+    const value = this.state.value;
+    return(
+    <div>
+      <input type='text' value={value} onChange={this.handleChange} />
+        <BoilingVerdict temperature={parseInt(value)} />
+      </div>
+    )
   }
 }
 
 ReactDOM.render(
-<FlavorForm />,
+<Caculator />,
 document.getElementById('root')
 )
 
