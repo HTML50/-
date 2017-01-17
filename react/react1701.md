@@ -657,5 +657,229 @@ class Caculator extends React.Component{
 
 
 
+1月17日
+
 ### Adding a Second Input 
 
+ 增加另一个input，将两个input分别设置为华氏温度、摄氏温度。
+
+先从`Caculator`中分解出来一个`TemperatureInput` 。建立一个新的prop，叫做`scale`，用来传递不同种类的温度`c`,`f`。
+
+大概看了一遍官网的代码，自己先写了一个，完成了两个input，但是标准代码是两个Component，包含state，用于下一步的相互转化。
+
+```jsx
+const scaleNames = {
+  c: 'Celsius',
+  f: 'Fahrenheit'
+};
+
+class TemperatureInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.state = {value: ''};
+  }
+
+  handleChange(e) {
+    this.setState({value: e.target.value});
+  }
+
+  render() {
+    const value = this.state.value;
+    const scale = this.props.scale;
+    return (
+      <fieldset>
+        <legend>Enter temperature in {scaleNames[scale]}:</legend>
+        <input value={value}
+               onChange={this.handleChange} />
+      </fieldset>
+    );
+  }
+}
+
+class Calculator extends React.Component {
+  render() {
+    return (
+      <div>
+        <TemperatureInput scale="c" />
+        <TemperatureInput scale="f" />
+      </div>
+    );
+  }
+}
+```
+
+还是COPY官方的吧。此时，两个不同的温度不会自动转化，也没有关于水是否沸腾的判断，以为温度值是在不同的Component内部的state保存的，下一步就来Lifting state up。
+
+
+
+### Lifting State Up
+
+先写个温度互相转换的函数
+
+```jsx
+function toCelsius(fahrenheit) {
+  return (fahrenheit - 32) * 5 / 9;
+}
+
+function toFahrenheit(celsius) {
+  return (celsius * 9 / 5) + 32;
+}
+```
+
+然后写一个函数，整合上面的函数
+
+```jsx
+function tryConvert(value, convert) {
+  const input = parseFloat(value);
+  if (Number.isNaN(input)) {
+    return '';
+  }
+  const output = convert(input);
+  const rounded = Math.round(output * 1000) / 1000;
+  return rounded.toString();
+}
+```
+
+下面，把state从`TemperatureInput`中删除，并且把`input`的`onChange`设置为props的handler。`input`的`value`来自于props。
+
+```jsx
+class TemperatureInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(e) {
+    this.props.onChange(e.target.value);
+  }
+
+  render() {
+    const value = this.props.value;
+    const scale = this.props.scale;
+    return (
+      <fieldset>
+        <legend>Enter temperature in {scaleNames[scale]}:</legend>
+        <input value={value}
+               onChange={this.handleChange} />
+      </fieldset>
+    );
+  }
+}
+```
+
+最后，将state的值放在调用`TemperatureInput`的`Calculator`中，这种思想就是lifting state up，共享的state放在最近的祖先中。
+
+
+
+完整代码如下：
+
+```jsx
+function BoilingVerdict(props) {
+  if (props.celsius >= 100) {
+    return <p>The water would boil.</p>;
+  }
+  return <p>The water would not boil.</p>;
+}
+
+function toCelsius(fahrenheit) {
+  return (fahrenheit - 32) * 5 / 9;
+}
+
+function toFahrenheit(celsius) {
+  return (celsius * 9 / 5) + 32;
+}
+
+const scaleNames = {
+  c: 'Celsius',
+  f: 'Fahrenheit'
+};
+
+function tryConvert(value, convert) {
+  const input = parseFloat(value);
+  if (Number.isNaN(input)) {
+    return '';
+  }
+  const output = convert(input);
+  const rounded = Math.round(output * 1000) / 1000;
+  return rounded.toString();
+}
+
+class TemperatureInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(e) {
+    this.props.onChange(e.target.value);
+  }
+
+  render() {
+    const value = this.props.value;
+    const scale = this.props.scale;
+    return (
+      <fieldset>
+        <legend>Enter temperature in {scaleNames[scale]}:</legend>
+        <input value={value}
+               onChange={this.handleChange} />
+      </fieldset>
+    );
+  }
+}
+
+
+class Calculator extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleCelsiusChange = this.handleCelsiusChange.bind(this);
+    this.handleFahrenheitChange = this.handleFahrenheitChange.bind(this);
+    this.state = {value: '', scale: 'c'};
+  }
+
+  handleCelsiusChange(value) {
+    this.setState({scale: 'c', value});
+  }
+
+  handleFahrenheitChange(value) {
+    this.setState({scale: 'f', value});
+  }
+
+  render() {
+    const scale = this.state.scale;
+    const value = this.state.value;
+    const celsius = scale === 'f' ? tryConvert(value, toCelsius) : value;
+    const fahrenheit = scale === 'c' ? tryConvert(value, toFahrenheit) : value;
+
+    return (
+      <div>
+        <TemperatureInput
+          scale="c"
+          value={celsius}
+          onChange={this.handleCelsiusChange} />
+        <TemperatureInput
+          scale="f"
+          value={fahrenheit}
+          onChange={this.handleFahrenheitChange} />
+        <BoilingVerdict
+          celsius={parseFloat(celsius)} />
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(
+<Calculator />,
+document.getElementById('root')
+)
+```
+
+[Try it on CodePen.](http://codepen.io/gaearon/pen/ozdyNg?editors=0010)
+
+![Monitoring State in React DevTools](https://facebook.github.io/react/img/docs/react-devtools-state.gif)
+
+
+
+小结：这个有些复杂了，卡壳了半天。其中`e.target.value`与`onChange`函数自身能传递input的`value`在官网上都没有交待，自己做了点小实验才弄明白逻辑。自己写的代码绑定的state有问题，逻辑还有待加强训练。另外看了一些毕业react作品，我感觉学一个东西环境影响是比较大的，当什么都不知道的时候，直接灌输react的思想是很容易进入脑中的。当熟练了另外一种工具，再去学习不太相同的东西，前者的固有思维是常常出现的。
+
+明天再把这个例子复习一遍。
