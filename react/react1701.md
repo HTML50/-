@@ -883,3 +883,66 @@ document.getElementById('root')
 小结：这个有些复杂了，卡壳了半天。其中`e.target.value`与`onChange`函数自身能传递input的`value`在官网上都没有交待，自己做了点小实验才弄明白逻辑。自己写的代码绑定的state有问题，逻辑还有待加强训练。另外看了一些毕业react作品，我感觉学一个东西环境影响是比较大的，当什么都不知道的时候，直接灌输react的思想是很容易进入脑中的。当熟练了另外一种工具，再去学习不太相同的东西，前者的固有思维是常常出现的。
 
 明天再把这个例子复习一遍。
+
+
+
+1月18日
+
+复习。
+
+把昨天模糊的地方自己探索了一下。
+
+```jsx
+class Input extends React.Component{
+	constructor(props){
+		super(props)
+		this.handle = this.handle.bind(this)
+	}
+
+	handle(e){
+		this.props.onChange(e.target.value)
+	}
+
+	render(){
+		const value=this.props.value;
+		return(
+			<input value={value} onChange={this.handle} />
+		)
+	}
+}
+
+class Calculator extends React.Component{
+	constructor(props){
+		super(props)
+		this.state = {value:'test'}
+		this.handle = this.handle.bind(this)
+	}
+
+	handle(value){
+	this.setState({value:value})
+	}
+
+	render(){
+		const value =this.state.value;
+		return(
+			<Input value={value} onChange={this.handle} />
+		)
+	}
+}
+
+ReactDOM.render(
+	<Calculator />,
+	document.getElementById('root')
+)
+```
+
+弄明白了`e.target.value`是WEB API的内容，意思是当鼠标单击input产生事件时，`e.target`就是事件来自哪里，那么`e.target.value`这个就是值。
+
+`this.props.onChange(e.target.value)`这句是调用Component赋值时的`onChange`事件，可以把props看做是`<Input value={value} onChange={this.handle} />`这个。
+
+刚开始我忘记把handle bind(this)了，导致输入时报错。我还在想为什么必须要bind(this)，最后按照规定写，就不报错了。
+
+
+
+自己又写了一遍。初始化时，有一个input显示NaN，经过调查，是因为`tryConvert`没有作参数预处理。
+
