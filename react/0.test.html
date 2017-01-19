@@ -8,90 +8,62 @@
 <body>
 <div id='root'></div>
 <script type='text/babel'>
-const scaleNames = {
-c:'Celsius',
-f:'Fahrenheit'
-};
 
-function toCelsius(f){
-return (f - 32) * 5 / 9;
+
+
+
+function LegendBox(props){
+return (
+<fieldset>
+<legend>NASA</legend>
+{props.children}
+</fieldset>
+)
 }
 
-function toFahrenheit(c){
-return (c * 9 / 5) + 32;
+function Dialog(props){
+return(
+<LegendBox>
+<h1>{props.title}</h1>
+<p>{props.msg}</p>
+{props.children}
+</LegendBox>
+)
 }
 
-function tryConvert(value,convert){
-const input = parseFloat(value);
-if(Number.isNaN(input)) return '';
-console.log(input)
-const number= parseFloat(input)
-const rs = convert(number)
-return rs;
+class Program extends React.Component{
+constructor(props){
+super(props)
+this.state={value:''};
+this.handleChange = this.handleChange.bind(this);
+this.handleClick = this.handleClick.bind(this);
 }
 
-function BoilingVerdict(props){
-if(props.value>=100) return <p>水沸腾了！</p>;
-return <p>水还没有沸腾</p>;
+handleChange(e){
+this.setState({value:e.target.value})
 }
 
-class Input extends React.Component{
-	constructor(props){
-		super(props)
-		this.handle = this.handle.bind(this)
-	}
-
-	handle(e){
-		this.props.onChange(e.target.value)
-	}
-
-	render(){
-		const value=this.props.value;
-		return(
-			<fieldset>
-			<legend>请输入{this.props.scale}温度</legend>
-			<input value={value} onChange={this.handle} />
-			</fieldset>
-		)
-	}
+handleClick(){
+alert('恭喜你！欢迎加入我们，'+this.state.value)
 }
 
-class Calculator extends React.Component{
-	constructor(props){
-		super(props)
-		this.state = {value:'',scale: 'c'}
-		this.handleC = this.handleC.bind(this)
-		this.handleF = this.handleF.bind(this)
-	}
+render(){
+return(
+<Dialog title='火星探索计划' msg='我们怎么称呼您？'>
+<input value={this.state.value} onChange={this.handleChange} />
+<button onClick={this.handleClick}>报名!</button>
+</Dialog>
+)
 
-	handleC(value){
-	
-	this.setState({value:value,scale:'c'})
-	}
-	
-	handleF(value){
-	
-	this.setState({value:value,scale:'f'})
-	}
-
-	render(){
-		const value =this.state.value;
-		const celsius = this.state.scale === 'f' ? tryConvert(value, toCelsius) : value;
-		const fahrenheit = this.state.scale === 'c' ? tryConvert(value, toFahrenheit) : value;
-		return(
-		<div>
-			<Input value={celsius} scale={scaleNames.c} onChange={this.handleC} />
-			<Input value={fahrenheit} scale={scaleNames.f} onChange={this.handleF} />
-			<BoilingVerdict value={celsius} />
-		</div>
-		)
-	}
 }
+
+}
+
 
 ReactDOM.render(
-	<Calculator />,
-	document.getElementById('root')
-)
+  <Program />,
+  document.getElementById('root')
+);
 
 
 

@@ -946,3 +946,213 @@ ReactDOM.render(
 
 自己又写了一遍。初始化时，有一个input显示NaN，经过调查，是因为`tryConvert`没有作参数预处理。
 
+
+
+
+
+1月19日
+
+### Composition vs Inheritance
+
+https://facebook.github.io/react/docs/composition-vs-inheritance.html
+
+___
+
+React有强有力的组合方法，建议多使用Component间的组合，而不要使用继承的方法。
+
+本节将展示几个初学者常见的，想寻求继承方法的例子，使用组合的方法来解决。
+
+
+
+### Containment 
+
+有些Components是事先不知道他们的子元素的，比如``Sidebar` `Dialog`这样代表'boxes'的Component。
+
+对于这类Component，做法是，直接将props传递给children元素，`{props.children}`一句话搞定，看代码：
+
+```jsx
+function FancyBorder(props) {
+  return (
+    <div className={'FancyBorder FancyBorder-' + props.color}>
+      {props.children}
+      //这里的意思就是把props的children内容拿过来用了
+    </div>
+  );
+}
+```
+
+注意，这是另外一个**Component**的代码：
+
+```jsx
+function WelcomeDialog() {
+  return (
+    <FancyBorder color="blue">
+      //这里使用了上面代码中的Component,FancyBorder，下面的内容是WelcomeDialog的children
+      <h1 className="Dialog-title">
+        Welcome
+      </h1>
+      <p className="Dialog-message">
+        Thank you for visiting our spacecraft!
+      </p>
+    </FancyBorder>
+  );
+}
+```
+
+从控制台也可以看到，FancyBorder的props中，有一个children的属性。
+
+
+
+有时，你需要Component中有多个”接口“来自定义内容，可以使用Component来代替：
+
+```jsx
+function SplitPane(props) {
+  return (
+    <div className="SplitPane">
+      <div className="SplitPane-left">
+        {props.left}
+      </div>
+      <div className="SplitPane-right">
+        {props.right}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <SplitPane
+      left={
+        <Contacts />
+      }
+      right={
+        <Chat />
+      } />
+  );
+}
+```
+
+这里的App使用了SplitPane，并且使用了left和right两个属性，每个属性的内容均为一个Component。观察到，App()是没有props参数的，如果不需要传入参数，这样的写法是正确的。
+
+
+
+### Specialization 
+
+根据前面的例子，我们可以看到`WelcomeDialog`是`Dialog`的一种特殊情况，在React中，我们通过组合的方法，使用相对特殊的Component，调用相对一般的Component，比如使用`WelcomeDialog`来render`Dialog`，并且自定义props：
+
+```jsx
+function Dialog(props) {
+  return (
+    <FancyBorder color="blue">
+      <h1 className="Dialog-title">
+        {props.title}
+      </h1>
+      <p className="Dialog-message">
+        {props.message}
+      </p>
+    </FancyBorder>
+  );
+}
+
+function WelcomeDialog() {
+  return (
+    <Dialog
+      title="Welcome"
+      message="Thank you for visiting our spacecraft!" />
+  );
+}
+```
+
+这里`WelcomeDialog`调用了(render)`Dialog`，并且自定义了title与message的内容，在`Dialog`的定义中，输出的内容是由props.title与props.message决定的。
+
+
+
+同样，使用class声明的Component也可以这样做，下面的代码是个简单的alert输入内容的例子：
+
+```jsx
+function LegendBox(props){
+return (
+<fieldset>
+<legend>NASA</legend>
+{props.children}
+</fieldset>
+)
+}
+
+function Dialog(props){
+return(
+<LegendBox>
+<h1>{props.title}</h1>
+<p>{props.msg}</p>
+{props.children}
+</LegendBox>
+)
+}
+
+class Program extends React.Component{
+constructor(props){
+super(props)
+this.state={value:''};
+this.handleChange = this.handleChange.bind(this);
+this.handleClick = this.handleClick.bind(this);
+}
+
+handleChange(e){
+this.setState({value:e.target.value})
+}
+
+handleClick(){
+alert('恭喜你！欢迎加入我们，'+this.state.value)
+}
+
+render(){
+return(
+<Dialog title='火星探索计划' msg='我们怎么称呼您？'>
+<input value={this.state.value} onChange={this.handleChange} />
+<button onClick={this.handleClick}>报名!</button>
+</Dialog>
+)
+}
+}
+
+ReactDOM.render(
+  <Program />,
+  document.getElementById('root')
+);
+```
+
+直接用notepad++写jsx，不会自动调整格式。
+
+facebook中有上千个使用Component构建的部件，但没有一处需要使用继承方法的地方。如果需要复用，最好的方法就是分解成不同的块，使用本节的方法来实现。
+
+
+
+### Thinking in React
+
+https://facebook.github.io/react/docs/thinking-in-react.html
+
+___
+
+我们认为，React是使用javascript，用来构建庞大的、高效的Web app的好工具。Facebook和Instagram就用React构建的很好。
+
+本节例子将展示一个完整的思考过程，关于使用React制作一个产品数据搜索功能的组件。
+
+### Start With A Mock 
+
+假设现在有一个JSON API和一个设计草稿，如下所示：
+
+![Mockup](https://facebook.github.io/react/img/blog/thinking-in-react-mock.png)
+
+JSON API得到的数据如下：
+
+```JSON
+[
+  {category: "Sporting Goods", price: "$49.99", stocked: true, name: "Football"},
+  {category: "Sporting Goods", price: "$9.99", stocked: true, name: "Baseball"},
+  {category: "Sporting Goods", price: "$29.99", stocked: false, name: "Basketball"},
+  {category: "Electronics", price: "$99.99", stocked: true, name: "iPod Touch"},
+  {category: "Electronics", price: "$399.99", stocked: false, name: "iPhone 5"},
+  {category: "Electronics", price: "$199.99", stocked: true, name: "Nexus 7"}
+];
+```
+
