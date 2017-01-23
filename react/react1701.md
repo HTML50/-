@@ -1156,9 +1156,30 @@ JSON API得到的数据如下：
 ];
 ```
 
+如何实现？
+
 
 
 1月22日
 
 前两天过小年，出去玩了。
 
+
+
+1月23日
+
+###Step 1: Break The UI Into A Component Hierarchy 
+
+第一步，将UI打散成为一个个的Component，把每个Component用画框框的方式标注起来，同时给他们起个名字。
+
+成为Component的标准就是，只做一件事。
+
+![Component diagram](https://facebook.github.io/react/img/blog/thinking-in-react-components.png)
+
+从图片中看出，这个Component有5部分：
+
+1. 最外层黄框框，表示这个完整的Component。
+2. 蓝框框，是搜索功能input。
+3. 绿框框，总列表。
+4. 蓝框框，列表中的不同种类标题。
+5. 红框，列表不同种类的具体内容。
