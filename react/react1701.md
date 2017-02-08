@@ -1183,3 +1183,79 @@ JSON API得到的数据如下：
 3. 绿框框，总列表。
 4. 蓝框框，列表中的不同种类标题。
 5. 红框，列表不同种类的具体内容。
+
+
+
+2月8日
+
+过了个春节，怎么猛的看又不适应，该忘的都忘差不多了。
+
+对着教程看了半天，依葫芦画瓢，先写出一个静态页面。
+
+```jsx
+var productData = [
+  {category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football'},
+  {category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball'},
+  {category: 'Sporting Goods', price: '$29.99', stocked: false, name: 'Basketball'},
+  {category: 'Electronics', price: '$99.99', stocked: true, name: 'iPod Touch'},
+  {category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5'},
+  {category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7'}
+];
+ 
+
+class ProductArea extends React.Component{
+render(){
+return(
+<div>
+<SearchTable />
+<ProductTable data={productData} />
+</div>
+)
+}
+}
+
+class SearchTable extends React.Component{
+render(){
+return(
+<div>
+<input placeholder='Search...' />
+<p>
+<input type='checkbox' /> {' '}只显示有货商品
+</p>
+</div>
+)
+}
+}
+
+class ProductTable extends React.Component{
+render(){
+var row = [];
+this.props.data.forEach((product) =>{
+row.push(<tr key={product.name}><td>{product.name}</td><td>{product.price}</td></tr>)
+})
+
+return(
+<table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>{row}</tbody>
+      </table>
+)
+}
+}
+
+ReactDOM.render(
+  <ProductArea />,
+  document.getElementById('root')
+);
+```
+
+
+
+写的过程中磕磕绊绊，一个星期没看竟然生疏了这么多，写到后面都不太想写了。
+
+这几天计划刷刷面试题，啃基本JS书，准备面试了。

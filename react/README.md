@@ -1,5 +1,7 @@
 #Preventing Component from Renderingreact学习笔记 11月
 
+学习一下React，看的是facebook官方入门教程。边看边练习，顺带把大概意思敲一遍。
+
 
 
 2016年11月14日

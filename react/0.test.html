@@ -10,58 +10,67 @@
 <script type='text/babel'>
 
 
+var productData = [
+  {category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football'},
+  {category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball'},
+  {category: 'Sporting Goods', price: '$29.99', stocked: false, name: 'Basketball'},
+  {category: 'Electronics', price: '$99.99', stocked: true, name: 'iPod Touch'},
+  {category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5'},
+  {category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7'}
+];
+ 
 
 
-function LegendBox(props){
-return (
-<fieldset>
-<legend>NASA</legend>
-{props.children}
-</fieldset>
-)
-}
 
-function Dialog(props){
-return(
-<LegendBox>
-<h1>{props.title}</h1>
-<p>{props.msg}</p>
-{props.children}
-</LegendBox>
-)
-}
-
-class Program extends React.Component{
-constructor(props){
-super(props)
-this.state={value:''};
-this.handleChange = this.handleChange.bind(this);
-this.handleClick = this.handleClick.bind(this);
-}
-
-handleChange(e){
-this.setState({value:e.target.value})
-}
-
-handleClick(){
-alert('恭喜你！欢迎加入我们，'+this.state.value)
-}
-
+class ProductArea extends React.Component{
 render(){
 return(
-<Dialog title='火星探索计划' msg='我们怎么称呼您？'>
-<input value={this.state.value} onChange={this.handleChange} />
-<button onClick={this.handleClick}>报名!</button>
-</Dialog>
+<div>
+<SearchTable />
+<ProductTable data={productData} />
+</div>
 )
-
+}
 }
 
+class SearchTable extends React.Component{
+render(){
+return(
+<div>
+<input placeholder='Search...' />
+<p>
+<input type='checkbox' /> {' '}只显示有货商品
+</p>
+</div>
+)
 }
+}
+
+class ProductTable extends React.Component{
+render(){
+var row = [];
+this.props.data.forEach((product) =>{
+row.push(<tr key={product.name}><td>{product.name}</td><td>{product.price}</td></tr>)
+})
+
+return(
+<table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>{row}</tbody>
+      </table>
+)
+}
+}
+
 
 
 ReactDOM.render(
-  <Program />,
+  <ProductArea />,
   document.getElementById('root')
 );
 
