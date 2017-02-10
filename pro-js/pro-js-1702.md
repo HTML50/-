@@ -29,7 +29,7 @@ ___
 </script>
 ```
 
-`</scirpt>`是不能在JS代码片段中出现的，会直接闭合<script>，强行结束解释器对代码的解释。
+`</scirpt>`是不能在JS代码片段中出现的，会直接闭合`<script>`，强行结束解释器对代码的解释。
 
 
 
@@ -182,3 +182,91 @@ var messageAsBoolean = Boolean(message); // (Boolean) true
 
 
 对于Undefined类型，只能转换为false。
+
+
+
+
+
+2月10日
+
+（
+
+上午面试去了，项目经理面的，看了看GITHUB和博客，对我那个小游戏比较感兴趣，然后让去做一道上机题：输入框，按钮，输入形如"1,2,3,4,5,1"的参数，去重排序，结果显示在页面上。
+
+我一看比较简单，没听清要求不让使用Array.sort()排序。写的时候，刚开始把document.getElementById('input').value直接放在了`<script>`顶部，导致点击按钮，取得的value是空的，我竟然没检查出来。然后写出来的，忘加排序了。最后排序用的sort()，这一连串的粗心大意，导致直接pass。
+
+下次一定要听清要求，看清楚问题考虑好了再下笔。。。
+
+
+
+我回来又重新写了一遍，代码如下
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+<div>
+	请输入: <input id='inputData' type='text'>
+	<input type='button' onclick='sort()' value='去重排序'>
+	
+	<div id='rsArea'></div>
+</div>
+
+<script>
+function sort(){
+var input= toArray(document.getElementById('inputData').value),
+	output = document.getElementById('rsArea');
+	output.innerText = '结果是:' +arrSort(arrDup(input));
+}
+
+function toArray(str){
+	return eval('['+str+']');
+}
+
+function arrDup(arr){
+var rs=[];
+for(i=0;i<arr.length;i++){
+if(rs.indexOf(arr[i])==-1){
+rs.push(arr[i]);
+}
+}
+return rs;
+}
+
+function arrSort(arr){
+var flag=true,
+	k=arr.length;
+
+while(flag){
+	flag = false;
+	for(i=0;i<k;i++){
+		if(arr[i]>arr[i+1]){
+			var temp = arr[i+1];
+			arr[i+1] =arr[i];
+			arr[i] = temp;
+			flag = true;
+		}
+	}
+	k--;
+}
+return arr;
+}
+</script>
+
+</body>
+</html>
+```
+
+
+
+冒泡排序写的时候又忘了，看来算法要经常练。
+
+字符串转数组也需要复习一下(eval)。
+
+）
+
+
+
