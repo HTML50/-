@@ -184,9 +184,6 @@ var messageAsBoolean = Boolean(message); // (Boolean) true
 对于Undefined类型，只能转换为false。
 
 
-
-
-
 2月10日
 
 （
@@ -267,6 +264,5 @@ return arr;
 字符串转数组也需要复习一下(eval)。
 
 ）
-
 
 
