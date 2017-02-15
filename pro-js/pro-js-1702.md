@@ -33,7 +33,7 @@ ___
 
 
 
-defer与async
+**defer与async**
 
 ```javascript
 <script type='text/javascript' src='test.js' defer='defer'></script>
@@ -54,7 +54,7 @@ xhtml的用法略过没看。
 
 ___
 
-**第三章** 基本概念
+**第三章 基本概念**
 
 
 
@@ -75,13 +75,13 @@ function test(){
 
 
 
-保留字，关键字
+**保留字，关键字**
 
 从这里看到，ES5中的保留字`let`,`super`,`class`等在ES6中都用到了。
 
 
 
-变量
+**变量**
 
 在这里，第一次提出变量作用域。
 
@@ -110,13 +110,13 @@ alert(message); //hi
 
 
 
-数据类型
+**数据类型**
 
 String,Number,Null,Boolean,Undefined,Object
 
 
 
-typeof操作符
+**typeof操作符**
 
 typeof不是一个函数。
 
@@ -124,7 +124,7 @@ typeof不是一个函数。
 
 
 
-undefined类型
+**undefined类型**
 
 ```javascript
 var msg;
@@ -140,7 +140,7 @@ alert(typeof age); //undefined
 
 
 
-null类型
+**null类型**
 
 很好的一个用途就是用来保存object
 
@@ -162,7 +162,7 @@ null派生自undefined,所以有`null == undefined`为`true`。
 
 
 
-Boolean类型
+**Boolean类型**
 
 ```javascript
 var message = 'hello world';
@@ -266,3 +266,208 @@ return arr;
 ）
 
 
+
+2月13日
+
+ **浮点数**
+
+`0.1 + 0.2 != 0.3`
+
+具体为何如此，要看IEEE 754标准，十进制转为二进制。
+
+
+
+**数值范围**
+
+由于内存限制，ECMAscript有数值的范围。Number.MIN_VALUE和Number.MAX_VALUE，前者几乎是0，后者几乎是无穷大(Infinity)。
+
+
+
+**NaN**
+
+`NaN == NaN`,false。
+
+
+
+**数值转换**
+
+Number(),parseInt(),parseFloat()。
+
+Number('')  is 0;
+
+parseInt('') is NaN;
+
+
+
+**转化为字符串**
+
+var.toString() //除了null undefined不能使用这个方法。
+
+String()
+
+
+
+2月15日
+
+
+
+**位操作符**
+
+
+
+**~ 按位非(NOT)操作**
+
+本质是操作数的负值减1
+
+例如25按位非，得到-26
+
+因为-25的二进制是25的补码，也是25原码的反码+1（等于25按位非+1)
+
+所以-25 就是 25按位非 + 1，非操作就是 -25 -1 = -26
+
+
+
+按位与(AND) &
+
+按位或(OR) |
+
+按位异或(XOR) ^
+
+左移 << 右移 >>
+
+
+
+**布尔操作符**
+
+! && ||
+
+
+
+**乘性操作符**
+
+/ * %
+
+该类操作都会先自动进行类型转化Number()。
+
+
+
+**加性操作符**
+
++-
+
+
+
+相等 == 、全等 ===
+
+赋值 =
+
+不仅有 += , -= ,还有 *=,/,%=,<<=,>>=,>>>=多种符合赋值操作符。
+
+
+
+**语句**
+
+
+
+**Label**
+
+和break,continue配合使用，有点goto的意思
+
+```javascript
+var num = 0;
+
+outermost:
+for (var i=0; i < 10; i++) {
+  for (var j=0; j < 10; j++) {
+    if (i == 5 && j == 5) {
+      continue outermost;
+    }
+    num++;
+  }
+}
+
+alert(num);    //95
+```
+
+
+
+**Switch**
+
+switch()中的内容不仅可以是一个数值，也可以是表达式。
+
+case也可是表达式。
+
+```javascript
+var num = 25;
+switch (true) {
+  case num < 0: 
+    alert("Less than 0.");
+    break;
+  case num >= 0 && num <= 10: 
+    alert("Between 0 and 10.");
+    break;
+  case num > 10 && num <= 20: 
+    alert("Between 10 and 20.");
+    break;
+  default: 
+    alert("More than 20.");
+}
+```
+
+我还测试了使用函数作为switch的内容：
+
+```javascript
+switch (test()) {
+  case 1: 
+    alert("1");
+    break;
+  case 2: 
+    alert("2");
+    break;
+  default: 
+    alert("not 1");
+}
+
+function test(){
+  return 1;
+}
+```
+
+
+
+**函数**
+
+在严格模式下，函数的参数不可以重复，不能使用eval,arguments作为参数名。
+
+```javascript
+function test(e,e){
+'use strict'
+console.log(e);
+}
+test(1,2)
+```
+
+
+
+**第四章 变量、作用域和内存问题**
+
+引用类型值、基本类型值
+
+```javascript
+var name = "Nicholas";
+name.age = 27;
+alert(name.age); //undefined
+```
+
+基本类型值（这里是字符串类型）是无法添加属性的。
+
+
+
+```javascript
+var obj1 = new Object();
+var obj2 = obj1;
+obj1.name = "Nicholas";
+alert(obj2.name); //"Nicholas"
+```
+
+引用类型值（对象Object）的赋值，相当于指针。obj1,obj2都指向同一个对象。
