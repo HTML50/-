@@ -54,7 +54,7 @@ xhtml的用法略过没看。
 
 ___
 
-**第三章 基本概念**
+# **第三章 基本概念**
 
 
 
@@ -449,7 +449,7 @@ test(1,2)
 
 
 
-**第四章 变量、作用域和内存问题**
+# **第四章 变量、作用域和内存问题**
 
 引用类型值、基本类型值
 
@@ -471,3 +471,105 @@ alert(obj2.name); //"Nicholas"
 ```
 
 引用类型值（对象Object）的赋值，相当于指针。obj1,obj2都指向同一个对象。
+
+
+
+2月16日
+
+传递参数这里讲的很拗口。
+
+```javascript
+function test(num){
+  return num + 20;
+}
+
+var count = 20;
+var rs = test(count);
+alert(rs); 	  // 40
+alert(count); // 20
+```
+
+就是说，函数的参数(num)与传入参数(count)是独立的，并不会因参数的改变影响传入参数。
+
+
+
+如果传入值是一个object，参数也是将object的指向地址复制，改变参数的指向，无法改变传入的object的指向。
+
+
+
+instanceof, typeof
+
+typeof用来检测进本数据类型，instanceof用于检测是何种引用类型。
+
+
+
+**执行环境 作用域**
+
+作用域链
+
+
+
+**延长作用域链**
+
+```javascript
+function buildUrl(){
+var qs = "?debug=true";
+
+with(location){
+var url = href+qs;
+}
+return url;
+}
+
+alert(buildUrl())
+//显示当前页面地址+'?debug=true'
+```
+
+
+
+**没有块级作用域**
+
+```javascript
+if(true){
+  var color='red'
+}
+alert(color) //red
+
+
+for(var i=0;i<10;i++){
+  //to do
+}
+alert(i)
+```
+
+这些看似在{}块内包裹的局部变量，都可以在全局作用域访问得到，因为JS不存在块级作用域。
+
+
+
+# **第五章 引用类型**
+
+**Object**
+
+一个对象中的属性，有两种访问方式：
+
+```javascript
+var person = {
+"name" : 'Tom'
+}
+
+alert(person.name);
+alert(person[name]);
+```
+
+点表示法，方括号表示法。
+
+括号表示法可以使用变量，特殊字符，关键字保留字等。点表示法不行。
+
+
+
+**Array**
+
+array.reverse() 将数组反向
+
+array.sort() 排序，比较的是元素toString()后的字符串大小。
+
