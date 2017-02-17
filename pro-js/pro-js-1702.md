@@ -567,9 +567,182 @@ alert(person[name]);
 
 
 
+toString(),toLocaleString()
+
+一般object在输出时都自动执行的是toString()。
+
+toLocaleString()是按本地的习惯输出内容。
+
+举个显而易见的例子：
+
+```javascript
+var date = new Date();
+console.log(date.toLocaleString())  //2017/2/16 下午8:14:52
+console.log(date.toString())		//Thu Feb 16 2017 20:14:52 GMT+0800 (中国标准时间)
+```
+
+
+
 **Array**
 
 array.reverse() 将数组反向
 
 array.sort() 排序，比较的是元素toString()后的字符串大小。
+
+如果要想自定义排序，需要自己写一个比较函数。
+
+```javascript
+function compare(a, b) {
+  if(a>b){
+  return -1;
+  }
+  else if(a<b){
+  return 1;
+  }
+  else{
+  return 0;
+  }
+}
+
+var values = [0,2,6,9,22,1,5,10,15];
+var arr = ['a','b','c','A','B','C','aa','ab','ac','ba','bb','bc','Aa','AA'];
+values.sort(compare);
+arr.sort(compare);
+
+console.log(values); 
+console.log(arr); 
+```
+
+> 比较函数接收两个参数，如果第一个参数应该位于第二个之前则返回一个负数，如果两个参数相等则返回 0，如果第一个参数应该位于第二个之后则返回一个正数。
+
+即，如果按降序排列，比较函数的a>b就要返回-1，升序就要返回1。
+
+如果数组是纯数字或字符串形式的数字，那么可以不判断a和b的大小之后再return，直接`return a-b;`或者`return b-a`来按升降序排列。
+
+
+
+2月17日
+
+**操作方法**
+
+Array.concat();
+
+连接参数至数组。
+
+```javascript
+var colors = ["red", "green", "blue"];
+var colors2 = colors.concat("yellow", ["black", "brown"]);
+alert(colors); //red,green,blue
+alert(colors2); //red,green,blue,yellow,black,brown
+```
+
+之前写笔试，其中有一个是复制数组。我用的是for循环，把每一项数组元素push到新建的数组内。效率太低了。使用无参数的concat()可以直接获得一个数组。
+
+
+
+Array.slice();
+
+```javascript
+var colors = ["red", "green", "blue", "yellow", "purple"];
+var colors2 = colors.slice(1);
+var colors3 = colors.slice(1,4);
+alert(colors2); //green,blue,yellow,purple
+alert(colors3); //green,blue,yellow
+```
+
+>在只有一个参数的情况下， slice() 方法返回从该参数指定位置开始到当前数组末尾的所有项。如果有两个参数，该方法返回起始和**结束位置之间**的项——但**不包括**结束位置的项。注意， slice() 方法不会影响原始数组。
+
+
+
+Array.splice();
+
+```javascript
+var values = [0,2,6,9,22,1,5,10,15];
+var rs = values.splice(0);
+console.log(values,rs)
+```
+
+删除和插入两种方法。有返回值。
+
+
+
+**位置查找**
+
+indexOf(),lastIndexOf()
+
+正向，反向查找一个值在数组中的位置。
+
+可以指定从第几位开始查找。
+
+```javascript
+var numbers = [1,2,3,4,5,4,3,2,1];
+alert(numbers.indexOf(1,1)); //8
+alert(numbers.indexOf(1,2)); //8
+alert(numbers.indexOf(1,8)); //8
+```
+
+从numbers中查找1，分别从1,2,8位查找，结果都是在数组numbers下标8中找到。不管从第几位开始找，最终找到的位置（元素唯一的情况下，本例就找后面的1，如果后面有两个1，就返回第一个1的位置）是确定的。
+
+
+
+
+
+> 在比较第一个参数与数组中的每一项时， 会使用全等操作符； 也就是说， 要求查找的项必须严格相等 （就像使用===一样） 。
+
+```javascript
+var person = { name: "Nicholas" };
+var people = [{ name: "Nicholas" }];
+var morePeople = [person];
+
+console.log(people.indexOf(person)); //-1
+console.log(morePeople.indexOf(person)); //0
+```
+
+有个概念需要明白，`{ name: "Nicholas" }  === { name: "Nicholas" }`的结果是false，因为对象只有和自己相等、全等。内容一样的两个对象是不等的，因为在内存中的地址不同。
+
+
+
+**迭代方法**
+
+every() ：对数组中的每一项运行给定函数，如果该函数对每一项都返回 true ，则返回 true 。
+some() ：对数组中的每一项运行给定函数，如果该函数对任一项返回 true ，则返回 true 。
+filter() ：对数组中的每一项运行给定函数，返回该函数会返回 true 的项组成的数组。
+forEach() ：对数组中的每一项运行给定函数。这个方法没有返回值。
+map() ：对数组中的每一项运行给定函数，返回每次函数调用的结果组成的数组。
+
+这几种方法大同小异
+
+```javascript
+var arr = [1,2,3,4,5]
+
+arr.forEach(function(item,index,array){
+console.log(item*2);
+})
+```
+
+
+
+reduce(),reduceRight()
+
+```javascript
+var values = [1,2,3,4,5];
+var sum = values.reduce(function(prev, cur, index, array){
+return prev + cur;
+});
+alert(sum); //15
+```
+
+> 第一次执行回调函数， prev 是 1， cur 是 2。第二次， prev 是 3（1 加 2 的结果） ， cur 是 3（数组的第三项） 。这个过程会持续到把数组中的每一项都访问一遍，最后返回结果。
+
+
+
+**RegExp**
+
+等价写法，但是new里面的pattern是字符串形式，需要双转义。
+
+var expression = /pattern/flags;
+
+var expression1 = new RegExp("pattern","flags");
+
+
 
