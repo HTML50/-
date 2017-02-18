@@ -736,6 +736,93 @@ alert(sum); //15
 
 
 
+2月18日
+
+（
+
+今天顺着一些小问题上网搜了搜。比如eval的用法，引出了一大堆新的疑问，发现自己真的是在入门阶段，随着逐层深入，理论也会越发复杂。有一些提问者就说，学习某本书的时候，有些代码看不懂。我就发现，自己不用急着实验摸索，先把书本老实学习完再说。之前也写过简单的博文，分析一下代码，现在看来，书上应该比我自己研究的更精确。以后有什么尝试，又不写文章论述了，反正有些地方自己也讲不明白，而且还有错的地方，意识到还要去修改。就借着学习笔记总结总结，就可以了。
+
+看代码：
+
+```javascript
+function test(a){
+  console.log(a === arguments[0]) //true
+  console.log(a,arguments[0])
+  var a=1;
+  console.log(a,arguments[0])
+}
+  
+test(2)  //2,2
+		//1,1
+```
+
+这说明，函数的参数变量，作用域在函数内（局部作用域），和arguments是等价的。
+
+在内部如果有和参数名相同的变量，就会起冲突，这里的例子就把参数变量覆盖了。
+
+
+
+之前写过一篇博文，是关于var,this的实验，里面得到的结论是var和this新建的变量，本质都是一样的，只是this是改变了作用域。
+
+今天在研究new Object和new Function出来的对象属性区别时，就又遇到了同样的问题。
+
+先写了一个这样的代码：
+
+```javascript
+  
+function person(name,age){
+  this.name = name;
+  this.age = age;
+}
+
+var joy = new person('joy',12);
+var tom = {
+name:'tom',
+age:13
+}
+
+
+console.log(tom,joy)
+//Object {name: "tom", age: 13} person {name: "joy", age: 12}
+```
+
+两个对象大同小异。
+
+我又尝试了：
+
+```javascript
+function person(name1,age1){
+  var name = name1;
+  var age = age1;
+}
+var joy = new person('joy',12);
+console.log(joy)
+//person {}
+```
+
+这说明，name,age没有成为joy的属性。
+
+只能带上this
+
+```javascript
+function person(name1,age1){
+  this.name = name1;
+  this.age = age1;
+  console.log(this.abc) //这里是undefined，而不是 error:  abc is not defined.
+}
+var joy = new person('joy',12);
+console.log(joy)
+//person {name: "joy", age: 12}
+```
+
+也就是说，new出来新对象时，this起了关键作用，已经指向对象本身了，和仅仅执行函数时的this是不同的。
+
+具体的细节，我相信在后面的学习中会更清楚。
+
+）
+
+
+
 **RegExp**
 
 等价写法，但是new里面的pattern是字符串形式，需要双转义。
@@ -745,4 +832,58 @@ var expression = /pattern/flags;
 var expression1 = new RegExp("pattern","flags");
 
 
+
+**捕获组模式exec()**
+
+```javascript
+var text = "mom and dad and baby";
+var pattern = /mom( and dad( and baby)?)?/gi;
+var matches = pattern.exec(text);
+alert(matches); //["mom and dad and baby", " and dad and baby", " and baby", index: 0, input: "mom and dad and baby"]
+alert(matches.index); // 0
+alert(matches.input); // "mom and dad and baby"
+alert(matches[0]); // "mom and dad and baby"
+alert(matches[1]); // " and dad and baby"
+alert(matches[2]); // " and baby"
+```
+
+多观察，多记忆。
+
+
+
+```javascript
+var text = "cat, bat, sat, fat";
+
+var pattern1 = /.at/;
+var matches = pattern1.exec(text);
+alert(matches.index); //0
+alert(matches[0]); //cat
+alert(pattern1.lastIndex); //0
+
+matches = pattern1.exec(text);
+alert(matches.index); //0
+alert(matches[0]); //cat
+alert(pattern1.lastIndex); //0
+
+var pattern2 = /.at/g;
+var matches = pattern2.exec(text);
+alert(matches.index); //0
+alert(matches[0]); //cat
+alert(pattern2.lastIndex); //3
+
+matches = pattern2.exec(text);
+alert(matches.index); //5
+alert(matches[0]); //bat
+alert(pattern2.lastIndex); //8
+```
+
+表达式中带`g`标志，和不带`g`标志的区别：继续在上一次的基础上查找。
+
+注意`pattern1.lastIndex`，查找的位置是放在pattern内。3和8都代表字符串的位置，意思是前面的均为匹配内容。
+
+
+
+**test()**
+
+> 正则表达式的第二个方法是 test() ，它接受一个字符串参数。在模式与该参数匹配的情况下返回true ；否则，返回 false 。
 
