@@ -8,6 +8,7 @@
 <center>
 	<input type='button' onclick='showVisitor()' value='24小时访问分布'>
   <input type='button' onclick='showResult()' value='抽奖结果'>
+  <input type='button' onclick='window.location.reload();' value='刷新随机情况'>
  </center>
   <br />
   
@@ -60,7 +61,7 @@ doLottery();
 console.log('剩余的奖品',prize1st,prize2nd,prize3rd)
 console.log('中奖情况',lottery1Arr,lottery2Arr,lottery3Arr)
 
-
+drawVistors();
 
 
 function setVistors(){
