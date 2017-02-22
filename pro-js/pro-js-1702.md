@@ -883,12 +883,6 @@ alert(pattern2.lastIndex); //8
 
 
 
-**test()**
-
-> 正则表达式的第二个方法是 test() ，它接受一个字符串参数。在模式与该参数匹配的情况下返回true ；否则，返回 false 。
-
-
-
 2月20日
 
 (面试——作业：设计一种算法，保证一个抽奖活动的用户，一二三等奖的中奖情况均匀分布在一天之中，最好能保证中奖的概率会根据访问量动态修正，人越多中奖概率越大）
@@ -900,3 +894,161 @@ alert(pattern2.lastIndex); //8
 分析了一下，在自然情况下，中奖的概率是均匀分布的。因为总的奖品数量有限，拿完就没有了，如果抽奖事件可以重复N次，就会发现分布的规律。如果强制需要阶段性的中奖规律，比如上午一个一等奖，下午才能再中奖，就是需要改变中奖概率。看了看数学概念，又看了点帖子。勉强写了个demo。原理是把一天划分为三个时间段，在每个时间段均分奖品。
 
 [demo](https://html50.github.io/study-notes/pro-js/lottery.html)
+
+
+
+2月22日
+
+**test()**
+
+> 正则表达式的第二个方法是 test() ，它接受一个字符串参数。在模式与该参数匹配的情况下返回true ；否则，返回 false 。
+
+test()与exec()用法类似，一般用于检测有效性，返回true false，比如检验用户输入的邮箱是否格式正确。
+
+
+
+**构造函数属性**
+
+>
+> input  $_
+>
+> 最近一次要匹配的字符串。Opera未实现此属性
+>
+> lastMatch  $&
+>
+> 最近一次的匹配项。Opera未实现此属性
+>
+> lastParen  $+
+>
+> 最近一次匹配的捕获组。Opera未实现此属性
+>
+> leftContext  $`
+>
+> input字符串中lastMatch之前的文本
+>
+> multiline  $*
+>
+> 布尔值，表示是否所有表达式都使用多行模式。IE和Opera未实现此属性
+>
+> rightContext  $'
+>
+> Input字符串中lastMatch之后的文本
+
+
+
+```javascript
+var text = "this has been a short summer";
+var pattern = /(..)or(.)/g;
+/*
+* 注意：Opera 不支持 input、lastMatch、lastParen 和 multiline 属性
+* Internet Explorer 不支持 multiline 属性
+*/
+if (pattern.test(text)){
+alert(RegExp.input); // this has been a short summer
+alert(RegExp.leftContext); // this has been a
+alert(RegExp.rightContext); // summer
+alert(RegExp.lastMatch); // short
+alert(RegExp.lastParen); // s
+alert(RegExp.multiline); // undefined
+}
+```
+
+input, rightContext等属性与`$_` `$'`等价
+
+
+
+```javascript
+var text = "this has been a short summer";
+var pattern = /(..)or(.)/g;
+if (pattern.test(text)){
+alert(RegExp.$1); //sh
+alert(RegExp.$2); //t
+}
+```
+
+这里创建了一个包含两个捕获组的模式，并用该模式测试了一个字符串。即使 test() 方法只返回一个布尔值，但 RegExp 构造函数的属性 `$1` 和 `$2` 也会被匹配相应捕获组的字符串自动填充。
+
+
+
+**Function**
+
+函数的本质上是对象。
+
+```javascript
+function sum(num1, num2){
+return num1 + num2;
+}
+alert(sum(10,10)); //20
+var anotherSum = sum;
+alert(anotherSum(10,10)); //20
+sum = null;
+alert(anotherSum(10,10)); //20
+```
+
+使用不带`()`的函数名访问的是函数的指针。`var anotherSum = sum`，这里就是把sum的指向地址复制给了anotherSum。同时，如果把sum设定null，取消对于函数内容的指向，anotherSum还是可以执行的，这就说明了函数内容没变化，一个函数内容可以有多个函数名（指向自身的指针）。
+
+
+
+**内部属性**
+
+```javascript
+function factorial(num){
+if (num <=1) {
+return 1;
+} else {
+return num * factorial(num-1)
+}
+}
+
+function factorial(num){
+if (num <=1) {
+return 1;
+} else {
+return num * arguments.callee(num-1)
+}
+}
+```
+
+使用`arguments.callee()`解决了调用自身时，函数名与函数内容的高耦合，无需担心改变函数名称导致函数自调出错之类的问题。
+
+
+
+**基本包装类型**
+
+string
+
+```javascript
+var str=new String('123');
+
+alert(typeof str)					//object
+alert(str instanceof String)		//true
+alert(str.__proto__)				//String {length: 0, [[PrimitiveValue]]: ""}
+alert(str.constructor.prototype)	//String {length: 0, [[PrimitiveValue]]: ""}
+```
+
+
+
+字符串访问指定位置
+
+```javascript
+var str = 'test';
+str.charAt(1); //e
+str[1];		//e
+```
+
+
+
+boolean
+
+> 布尔表达式中的所有对象都会被转换为 true
+
+```javascript
+var falseObj=new Boolean(false);
+alert( falseObj && true) //true
+```
+
+使用new Boolean得到的是Object类型的对象，进行布尔与操作时会被转化为true。
+
+
+
+> 建议是永远不要使用 Boolean 对象。
