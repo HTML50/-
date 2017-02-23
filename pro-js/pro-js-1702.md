@@ -1052,3 +1052,83 @@ alert( falseObj && true) //true
 
 
 > 建议是永远不要使用 Boolean 对象。
+
+
+
+2月23日
+
+```javascript
+var str='welcome';
+
+alert(str.slice(3,-1)) //com
+alert(str.substr(3,-1))//
+alert(str.substring(3,-1))//wel
+```
+
+slice()第二个参数为负数，则从字符串反方向查询。substring()的负数直接转化为0。
+
+substr()用法不太一样，第二个参数为显示第一个参数位置后的几个字符。前两个第二个参数为切割到第几位。
+
+str是从0位开始的，第0位是'w'。
+
+
+
+string.match()
+
+```javascript
+var str='welcome ';
+var expression = /e./
+
+var matches=str.match(expression)   
+alert(matches) //["el", index: 1, input: "welcome"]
+```
+
+如果exp带g标志，则返回数组`['el','e ']`。
+
+
+
+string.replace(), split()都可以跟正则表达式
+
+```javascript
+var colorText = "red,blue,green,yellow";
+var colors3 = colorText.split(/[^\,]+/g);
+var colors4 = colorText.split(/^\,+/g);
+alert(colors3,colors4)  //["", ",", ",", ",", ""] ["red,blue,green,yellow"]
+```
+
+`[^\,]+`和`^\,+`是有区别的，`\,`代表逗号，如果加上`[]`，是字符集，此时的`[^\,]+`代表的是除去包含逗号外的字符集，没有`[]`，代表的是以逗号开头的字符集。关键在于有没有`[]`。
+
+
+
+**单体内置对象**
+
+```javascript
+var uri = "http://www.wrox.com/illegal value.htm#start";
+//"http://www.wrox.com/illegal%20value.htm#start"
+alert(encodeURI(uri));
+//"http%3A%2F%2Fwww.wrox.com%2Fillegal%20value.htm%23start"
+alert(encodeURIComponent(uri));
+```
+
+URI编码。
+
+
+
+**Math对象**
+
+```javascript
+var values = [1, 2, 3, 4, 5, 6, 7, 8];
+var max = Math.max.apply(Math, values);
+//8
+```
+
+Math.max()接收的参数为(n1,n2,n3,n4,n5...,n)这样的形式，若想使用数组，可以使用apply()。
+
+
+
+Math.ceil() 、 Math.floor() 和 Math.round() 
+
+向上舍入，向下，四舍五入。
+
+
+
