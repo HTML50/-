@@ -1132,3 +1132,122 @@ Math.ceil() 、 Math.floor() 和 Math.round()
 
 
 
+2月24日
+
+# 第六章 面向对象
+
+```javascript
+var book = {
+_year: 2004,
+edition: 1
+};
+Object.defineProperty(book, "year", {
+get: function(){
+return this._year;
+},
+set: function(newValue){
+if (newValue > 2004) {
+this._year = newValue;
+this.edition += newValue - 2004;
+}
+}
+});
+book.year = 2005;
+alert(book.edition); //2
+```
+
+通过Object.defineProperty()方法，自定义setter与getter。也可以设定对象属性是否可修改。
+
+
+
+```javascript
+var descriptor = Object.getOwnPropertyDescriptor(book, "_year");
+alert(descriptor.value); //2004
+alert(descriptor.configurable); //false
+alert(typeof descriptor.get); //"undefined"
+```
+
+该方法用来读取对象的一些内部结构信息。
+
+
+
+**工厂模式**
+
+```javascript
+function createPerson(name,age){
+  var obj = {
+    name: name,
+    age:  age,
+    sayName: function(){
+      return this.name;
+    }
+  }
+  return obj;
+}
+
+var tom = createPerson('tom',10);
+var jack = createPerson('jack',11);
+
+alert(tom.sayName())//tom
+```
+
+
+
+**构造函数模式**
+
+```javascript
+function Person(name,age){
+  this.name = name;
+  this.age = age;
+  this.sayName= function(){
+    return this.name;
+  }
+}
+
+var tom = new Person('tom',10);
+var jim = new Person('jim',12);
+
+alert(tom.sayName())
+```
+
+ 
+
+```javascript
+delete person1.name;
+person1.hasOwnProperty('name') //false
+```
+
+delete用于删除实例属性，获取访问原型属性的能力。hasOwnProperty()是检测对象实例是否拥有实例属性。
+
+
+
+```javascript
+function Person(){
+}
+var friend = new Person();
+Person.prototype = {
+constructor: Person,
+name : "Nicholas",
+age : 29,
+job : "Software Engineer",
+sayName : function () {
+alert(this.name);
+}
+};
+friend.sayName(); //error
+```
+
+`Person.prototype={}`字面量形式完全重写prototype，导致切断实例friend与最初原型的关系。
+
+字面量形式var obj={ } 类似于 var obj  = new Object()，这样会重写原型。
+
+
+
+这一章看的比较快，内容不多，但是逻辑挺复杂的。以后有待遇到问题时再次研究。
+
+
+
+# 第七章 函数表达式
+
+**闭包**
+
