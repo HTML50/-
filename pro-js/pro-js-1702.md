@@ -1247,7 +1247,51 @@ friend.sayName(); //error
 
 
 
+
+
+2月25日
+
 # 第七章 函数表达式
 
 **闭包**
 
+```javascript
+function createFunctions(){
+  var result = new Array();
+  for (var i=0; i < 10; i++){
+    result[i] = function(){
+   	 return i;
+    };
+  }
+  return result;
+}
+createFunctions();
+```
+
+这个配合执行环境、活动对象的讲解看的真是眩晕。
+
+仔细观察代码，这里result[i]被赋值的内容是匿名函数，也就是说，`createFunctions()`执行完毕后，把返回的result的内容打印出来，是：
+
+```javascript
+[function, function, function, function, function, function, function, function, function, function]
+```
+
+10个函数组成的数组。
+
+随便输出一个函数，看看内容：
+
+alert(createFunctions()[0])
+
+```javascript
+function (){
+   	 return i;
+    }
+```
+
+执行这个函数`createFunctions()[0]()`，得到10，也就是说，这时，顺着作用域链寻找变量i，能找到i=10，执行时，这个函数返回10。
+
+
+
+问题：什么时候调用结束后，活动对象就被垃圾收回，比如上面这个例子，何时i就无效了。
+
+如何可以在for循环中，将for中的i，作为变量赋值给匿名返回函数。
