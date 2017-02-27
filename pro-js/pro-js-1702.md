@@ -1292,6 +1292,122 @@ function (){
 
 
 
-问题：什么时候调用结束后，活动对象就被垃圾收回，比如上面这个例子，何时i就无效了。
+2月27日
 
-如何可以在for循环中，将for中的i，作为变量赋值给匿名返回函数。
+为什么说是顺着作用域链寻找i，把result中的函数定义修改一下：
+
+```javascript
+function createFunctions(){
+  var result = new Array();
+  for (var i=0; i < 10; i++){
+    result[i] = function(){
+   	 return abc;
+    };
+  }
+  return result;
+}
+createFunctions();
+```
+
+return i 换为 return abc，一个未声明的变量，执行上面代码并不报错，查看result[0]可以看到函数定义：
+
+```javascript
+function(){
+   	 return abc;
+    }
+```
+
+执行result[0]()，才会报错，这说明，定义函数内容时，并不会对变量进行检查、访问。所以，上面使用return i，函数内容仍是i变量，只有访问时，才会去顺着定义链查找i，此时，i已经是进行完for循环的值了。
+
+
+
+问题：
+
+1. 什么时候调用结束后，活动对象就被垃圾收回，比如上面这个例子，何时i就无效了。
+2. 如何可以在for循环中，将for中的i，作为变量赋值给匿名返回函数。
+
+
+
+1.正常情况下，一个函数执行完，就会被回收，其作用域链，活动对象也随之消除。但在闭包的情况下，解除对匿名函数的引用才能收回活动对象。
+
+```javascript
+function counter(){
+var counter=0;
+return function(){
+counter++;
+alert(counter)
+}
+}
+
+var c1=counter()
+c1()//1
+c1()//2
+c1()//3
+
+counter()()//1
+counter()()//1
+```
+
+从这个例子中看到，只有将返回函数赋给一个变量，然后执行变量，counter得以保持。
+
+然而，直接执行返回函数，每次结果相同，counter无法保持，每次都是新的，执行完毕后会被垃圾收回。
+
+窃以为，闭包之所以形成，且不会被垃圾回收，是赋值给变量导致的，如果将变量与函数之间的引用去掉，闭包也会被消除。
+
+
+
+2.修改一下for循环中的内容，将rusult中返回的函数立即匿名执行。
+
+```javascript
+function createFunctions(){
+  var result = new Array();
+  for (var i=0; i < 10; i++){
+    //result[i] = function(){
+   	// return i;
+    //};
+    
+    result[i] = function(i){
+   	 return i;
+    }(i);
+  }
+  return result;
+}
+alert(createFunctions());   //[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
+
+这样等同于 result[i] = i;
+
+如果要返回一个函数，且里面的i与result数组下标相同，就要再写一个匿名函数：
+
+```javascript
+function createFunctions(){
+  var result = new Array();
+  for (var i=0; i < 10; i++){
+    result[i] = function(i){
+   	 return function(){
+      return i; 
+     };
+    }(i);
+  }
+  return result;
+}
+
+var rs=createFunctions()
+alert(rs[0](),rs[1]());   //0,1
+```
+
+
+
+**特权模式**
+
+这个内容有点与前面一章的原型继承类似，以后需要再仔细看。
+
+
+
+# 第八章 BOM
+
+```javascript
+alert(test) // error
+alert(window.test) //undefined
+```
+
