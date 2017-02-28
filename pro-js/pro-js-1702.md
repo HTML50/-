@@ -1411,3 +1411,25 @@ alert(test) // error
 alert(window.test) //undefined
 ```
 
+
+
+2月28日
+
+location/navigator/history
+
+history.replace(url) 替换当前历史记录为URL，且访问该url。
+
+
+
+# 第九章 客户端检测 
+
+这一章讲了一个代码实例，是关于如何判断浏览器相关信息的。
+
+在精细开发中可能会遇到这样的情况。
+
+
+
+# 第十章 DOM
+
+
+
