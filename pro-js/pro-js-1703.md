@@ -189,12 +189,8 @@ else if (document.readyState == "loading"){
 <div id="myDiv" data-appId="12345" data-myname="Nicholas"></div>
 ```
 
-可用dataset访问自定义属性。
+可用dataset访问自定义属性。在最新版本的CHROME中测试，不加data-前缀也可以正常自定义数据。
 
 
 
 innerText会改变所有子文本节点中的内容；会对Html语法编码。
-
-
-
-#第十二章 DOM2 DOM3
