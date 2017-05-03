@@ -30,13 +30,13 @@ dom.style.removeProperty('border')
 
 css规则
 
-````css
+```css
 div.box {
 background-color: blue;
 width: 100px;
 height: 200px;
 }
-````
+```
 
 ```javascript
 var sheet = document.styleSheets[0];
@@ -106,8 +106,8 @@ btn.onclick = null;
 
 
 
->大多数情况下，都是将事件处理程序添加到事件流的冒泡阶段，这样可以最大限度地兼容各种浏览
->器。最好只在需要在事件到达目标之前截获它的时候将事件处理程序添加到捕获阶段。如果不是特别需要，我们不建议在事件捕获阶段注册事件处理程序。
+> 大多数情况下，都是将事件处理程序添加到事件流的冒泡阶段，这样可以最大限度地兼容各种浏览
+> 器。最好只在需要在事件到达目标之前截获它的时候将事件处理程序添加到捕获阶段。如果不是特别需要，我们不建议在事件捕获阶段注册事件处理程序。
 
 写的很明白，我就不总结了。
 
@@ -150,4 +150,29 @@ function showId() {
     alert(this.id);
 }
 ```
+
+
+
+5月3日
+
+（新买了个联想小新笔记本，折腾了1天半没安好UBUNTU，上网查了查，说硬盘模式写死成sata+raid，读不了硬盘。于是暂时先不折腾，等过一段时间有方案再研究）
+
+
+
+**事件类型**
+
+UI事件（load, unload, select, resize, scroll)
+
+之前总是在国外网站上遇到这种提示，关闭网页时，提示有更改未保存，是否留下。
+
+```html
+<body onunload='alert(1)';>
+```
+
+```javascript
+window.addEventListner('unload',function(){alert(1)});
+window.onunload = function(){alert(1)};
+```
+
+这样做都是办不到的，只有
 
