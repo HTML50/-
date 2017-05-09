@@ -327,3 +327,32 @@ required是HTML5 api中检查字段内容的方法。
 ```
 
 输入不合规范，会提示。
+
+
+
+5月9日
+
+```javascript
+var selectbox1 = document.getElementById("selLocations1");
+var selectbox2 = document.getElementById("selLocations2");
+selectbox2.appendChild(selectbox1.options[0]);	
+```
+
+对于已有的元素，使用`appendChild`将其附加到其他位置时，会先移除元素原先的位置，然后再移动。
+
+
+
+execCommand配合富文本编辑器的时候多，绑定在按钮上，对可编辑区域进行各种操作。
+
+document.queryCommandState('name')用于查看是否执行了相关操作：
+
+```javascript
+var isBold = frames["richedit"].document.queryCommandState("bold");
+var fontSize = frames["richedit"].document.queryCommandValue("fontsize");
+//如果有执行了操作，该命令查看操作的值
+```
+
+
+
+execCommand('copy')在firefox中默认是没有权限执行的。
+
