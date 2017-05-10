@@ -214,7 +214,7 @@ window['onclick'] = function(){
 
 （昨天折腾了一下午WINDOWS主题，最终各种软件都卸载了，还是使用最原始的Win+R）
 
-鼠标事件、键盘事件
+**鼠标事件、键盘事件**
 
 监听按下功能键时的左右位置
 
@@ -259,11 +259,11 @@ hashchange监控URL`#`后参数的变化。
 
 
 
-移动设备事件：设备水平状态，加速度。
+**移动设备事件**：设备水平状态，加速度。
 
 
 
-手势事件：touchstart, touchmove, touchend, touchcancel
+**手势事件**：touchstart, touchmove, touchend, touchcancel
 
 APPLE专有手势事件。
 
@@ -355,4 +355,84 @@ var fontSize = frames["richedit"].document.queryCommandValue("fontsize");
 
 
 execCommand('copy')在firefox中默认是没有权限执行的。
+
+
+
+5月10日
+
+# 第十五章 canvas
+
+绘制文字、图形、路径、旋转。
+
+canvas的概念不多，我自己也都用过，简单过一下。
+
+
+
+webGL略过。
+
+
+
+# 第十六章 HTML5脚本编程
+
+**原生拖动：**
+
+```html
+<t draggable='true' style='display:block;height:200px;width:400px;background:#ccc;'>hi there. I can fly~</t>
+```
+
+默认情况下，文字是可选状态，选中后才可以拖动。然后扔到，比如说地址栏，就可以进行搜索。
+
+但是加上draggable以后，文字就不可选，拖动也无法扔到任何地方去。
+
+这时需要设置`dataTransfer`属性：
+
+```javascript
+t.addEventListener('dragstart',function(e){
+e.dataTransfer.setData('text','hhh')
+});
+```
+
+给元素增加一个`dragstart`事件的event listener，意思是，拖动开始时，设置dataTransfer中的内容。这时拖动元素，又可以扔到地址栏中搜索，不过这次搜索的关键字是上面代码设定的`"hhh"`。可以将内容设定为元素本身的内容`console.log(e.srcElement.innerText)`。
+
+
+
+**历史状态管理:**
+
+```html
+<a href='javascript:go(1)'>1</a>
+<a href='javascript:go(2)'>2</a>
+
+<script>
+function go(n){
+history.pushState({name:'test',number:n},'what','#'+n)
+}
+
+window.onpopstate = function(e){
+console.log(e.state)
+}
+</script>
+```
+
+基本上就是这两个方法放在一起使用，动态更改历史状态，而不真正的发送请求。用于解决单页面APP。比如我写的那个博客就是ajax + history.pushState来加载不同的页面，并实现前进后退。需要注意的是，pushState中的url地址要真实存在，不然报错。
+
+
+
+# 第十七章 错误处理与调试
+
+**try catch finally**
+
+finally中的代码在任何情况下都会执行。
+
+
+
+**错误类型**
+
+```javascript
+throw new SyntaxError("I don’t like your syntax.");
+throw new TypeError("What type of variable do you take me for?");
+throw new RangeError("Sorry, you just don’t have the range.");
+throw new EvalError("That doesn’t evaluate.");
+throw new URIError("Uri, is that you?");
+throw new ReferenceError("You didn’t cite your references properly.");
+```
 
