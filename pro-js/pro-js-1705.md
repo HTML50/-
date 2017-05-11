@@ -436,3 +436,195 @@ throw new URIError("Uri, is that you?");
 throw new ReferenceError("You didn’t cite your references properly.");
 ```
 
+
+
+5月11日
+
+面向公众的API必须要进行错误检测。
+
+
+
+**调试**
+
+早期没有调试工具时使用alert大法，后来使用控制台。IE常见错误略过（下面默认略过IE的内容。）
+
+
+
+# 第十八章 javascript与XML
+
+略过这一章，XML XSLT XPATH DOMPARSER这些词都没遇到过。
+
+
+
+
+
+# 第十九章 E4X
+
+略过。
+
+> **Warning: **E4X is deprecated. It will be disabled by default for content in Firefox 16, disabled by default for chrome in Firefox 17, and removed in Firefox 18. Use [`DOMParser`](https://developer.mozilla.org/en-US/docs/Web/API/DOMParser)/[`DOMSerializer`](https://developer.mozilla.org/en-US/docs/Web/API/DOMSerializer) or a non-native JXON algorithm instead.
+
+
+
+
+
+# 第二十章 JSON
+
+JSON(JavaScript Object Notation)
+
+
+
+**对象**
+
+字符串需要用双引号`""`裹住，单引号`''`会报错。无需声明`var`。
+
+这是JSON对象与JS字面量不太相同的地方。
+
+
+
+**数组**
+
+```json
+[25,"hi",true]
+```
+
+JSON的数组是js数组的字面量表示形式。
+
+
+
+一个复杂JSON的例子：
+
+```json
+[
+    {
+        "title": "Professional JavaScript",
+        "authors": [
+            "Nicholas C. Zakas"
+        ],
+        "edition": 3,
+        "year": 2011
+    },
+    {
+        "title": "Professional JavaScript",
+        "authors": [
+            "Nicholas C. Zakas"
+        ],
+        "edition": 2,
+        "year": 2009
+    },
+    {
+        "title": "Professional Ajax",
+        "authors": [
+            "Nicholas C. Zakas",
+            "Jeremy McPeak",
+            "Joe Fawcett"
+        ],
+        "edition": 2,
+        "year": 2008
+    },
+    {
+        "title": "Professional Ajax",
+        "authors": [
+            "Nicholas C. Zakas",
+            "Jeremy McPeak",
+            "Joe Fawcett"
+        ],
+        "edition": 1,
+        "year": 2007
+    },
+    {
+        "title": "Professional JavaScript",
+        "authors": [
+            "Nicholas C. Zakas"
+        ],
+        "edition": 1,
+        "year": 2006
+    }
+]
+```
+
+
+
+假设上面的例子是一个对象`book`
+
+```javascript
+var book = [
+  ...
+]
+```
+
+使用`var json = JSON.stringify(book)`，可以将对象序列化，得到JSON字符串：
+
+```json
+[{"title":"Professional JavaScript","authors":["Nicholas C. Zakas"],"edition":3,"year":2011},{"title":"Professional JavaScript","authors":["Nicholas C. Zakas"],"edition":2,"year":2009},{"title":"Professional Ajax","authors":["Nicholas C. Zakas","Jeremy McPeak","Joe Fawcett"],"edition":2,"year":2008},{"title":"Professional Ajax","authors":["Nicholas C. Zakas","Jeremy McPeak","Joe Fawcett"],"edition":1,"year":2007},{"title":"Professional JavaScript","authors":["Nicholas C. Zakas"],"edition":1,"year":2006}]
+```
+
+
+
+JSON.stringify有多种参数，可以指定要序列化的对象、使用函数、设置输出格式。
+
+比如这样：
+
+```javascript
+JSON.stringify(json,null,"--")
+```
+
+得到
+
+```json
+[
+--{
+----"title": "Professional JavaScript",
+----"authors": [
+------"Nicholas C. Zakas"
+----],
+----"edition": 3,
+----"year": 2011
+--},
+--{
+----"title": "Professional JavaScript",
+----"authors": [
+------"Nicholas C. Zakas"
+----],
+----"edition": 2,
+----"year": 2009
+--},
+--{
+----"title": "Professional Ajax",
+----"authors": [
+------"Nicholas C. Zakas",
+------"Jeremy McPeak",
+------"Joe Fawcett"
+----],
+----"edition": 2,
+----"year": 2008
+--},
+--{
+----"title": "Professional Ajax",
+----"authors": [
+------"Nicholas C. Zakas",
+------"Jeremy McPeak",
+------"Joe Fawcett"
+----],
+----"edition": 1,
+----"year": 2007
+--},
+--{
+----"title": "Professional JavaScript",
+----"authors": [
+------"Nicholas C. Zakas"
+----],
+----"edition": 1,
+----"year": 2006
+--}
+]
+```
+
+
+
+
+
+# 第二十一章 ajax comet
+
+
+
