@@ -624,7 +624,121 @@ JSON.stringify(json,null,"--")
 
 
 
+5月15日
+
 # 第二十一章 ajax comet
+
+基础的ajax方法使用过几次，没什么难度。
+
+ W3C规范中定义的 xmlhttprequest2级新增了很多方法：FormData、响应超时、进度事件、跨资源共享等。
+
+
+
+**其他跨域技术**
+
+图像PING
+
+JSONP
+
+ajax对于跨域的请求是禁止的。但是img, script, iframe等含有SRC属性的标签可以直接调用跨域文件，所以在script中引用跨域js便可以实现。
+
+还有一些COMET, SSE, web socket跨域技术，还用不上，略过不看。
+
+
+
+# 第二十二章 高级技巧
+
+**安全类型检测方法**
+
+```javascript
+Object.prototype.toString.call('some string') == "[object Function]"
+//false
+```
+
+
+
+**作用域安全的构造函数**
+
+有构造函数如下：
+
+```javascript
+function Person(name, age, job){
+this.name = name;
+this.age = age;
+this.job = job;
+}
+var person = new Person("Nicholas", 29, "Software Engineer");
+```
+
+如果创建实例时忘加`new`操作符，就会导致错误。
+
+解决方法是在构造函数中增加判断：
+
+```javascript
+function Person(name, age, job){
+if (this instanceof Person){
+this.name = name;
+this.age = age;
+this.job = job;
+} else {
+return new Person(name, age, job);
+}
+}
+var person1 = Person("Nicholas", 29, "Software Engineer");
+alert(window.name); //""
+alert(person1.name); //"Nicholas"
+var person2 = new Person("Shelby", 34, "Ergonomist");
+alert(person2.name); //"Shelby"
+```
+
+
+
+再进一步，看一下继承的情况：
+
+```javascript
+function Polygon(sides){
+  this.sides = sides;
+  this.getArea = function(){
+    return 0;
+  }
+}
+
+function Rectangle(width, height){
+  Polygon.call(this, 2);
+  //继承Polygon的属性
+  this.width = width;
+  this.height = height;
+  this.getArea = function(){
+    return this.width * this.height;
+  };
+}
+
+var rect = new Rectangle(5, 10);
+alert(rect.sides);   //2
+```
+
+`rect`通过构造函数中对于`Polygon`的`call`，继承了`Polygon`函数中的属性。
+
+但是如果`Polygon`使用前一个例子中的安全作用域，如下所示：
+
+```javascript
+function Polygon(sides){
+  if (this instanceof Polygon) {
+    this.sides = sides;
+    this.getArea = function(){
+      return 0;
+    };
+  } else {
+    return new Polygon(sides);
+  }
+}
+```
+
+这样`rect`中就得不到`sides`的属性，因为`this`的缘故，`Polygon`会返回一个`new Polygon`。如果想要在这个基础上，仍然继承到`sides`等属性，需要作如下改动：
+
+```javascript
+
+```
 
 
 
