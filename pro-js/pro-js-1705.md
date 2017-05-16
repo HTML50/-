@@ -714,7 +714,7 @@ function Rectangle(width, height){
 }
 
 var rect = new Rectangle(5, 10);
-alert(rect.sides);   //2
+alert(rect.sides);  //2
 ```
 
 `rect`通过构造函数中对于`Polygon`的`call`，继承了`Polygon`函数中的属性。
@@ -732,13 +732,118 @@ function Polygon(sides){
     return new Polygon(sides);
   }
 }
+
+function Rectangle(width, height){
+	...
+}
+
+var rect = new Rectangle(5, 10);
+alert(rect.sides);  //undefined
 ```
 
-这样`rect`中就得不到`sides`的属性，因为`this`的缘故，`Polygon`会返回一个`new Polygon`。如果想要在这个基础上，仍然继承到`sides`等属性，需要作如下改动：
+这样`rect`中就得不到`sides`的属性，因为`this`的缘故，`Polygon`会返回一个`new Polygon`。
+
+如果想要在这个基础上，仍然继承到`sides`等属性，需要在`new Rectangle`前修改原型链，如下：
 
 ```javascript
-
+Rectangle.prototype = new Polygon();
+var rect = new Rectangle(5,10);
+alert(rect.sides);  //2
 ```
 
+`Rectangle`的原型被设定为`Polygon`，也就意味着`new Rectangle() instanceof Polygon == true`，于是再其构造函数中，`Polygon.call(this, 2)`对应在构造函数`Polygon`的代码：
 
+```javascript
+if (this instanceof Polygon) {
+    this.sides = sides;
+    this.getArea = function(){
+      return 0;
+    };
+}
+```
+
+`this`对象继承于`Polygon`，于是就可以继承`sides`, `getArea`属性。
+
+
+
+**惰性载入函数**
+
+当一个函数需要多个`if`分支来确定兼容性时，可以考虑惰性载入。原理就是重写函数或利用匿名立即执行函数加载时判断指定。
+
+比如早期使用AJAX时，针对IE/FF浏览器不同的支持方式，就会使用IF先进行版本判断，然后再确定调用`XHR`或`ActiveXObject`。
+
+代码如下：
+
+1.重写
+
+```javascript
+ function createXHR(){
+            if (typeof XMLHttpRequest != "undefined"){
+                createXHR = function(){
+                    return new XMLHttpRequest();
+                };
+            } else if (typeof ActiveXObject != "undefined"){
+                createXHR = function(){                    
+                    if (typeof arguments.callee.activeXString != "string"){
+                        var versions = ["MSXML2.XMLHttp.6.0", "MSXML2.XMLHttp.3.0",
+                                        "MSXML2.XMLHttp"],
+                            i, len;
+                
+                        for (i=0,len=versions.length; i < len; i++){
+                            try {
+                                new ActiveXObject(versions[i]);
+                                arguments.callee.activeXString = versions[i];
+                            } catch (ex){
+                                //skip
+                            }
+                        }
+                    }
+                
+                    return new ActiveXObject(arguments.callee.activeXString);
+                };
+            } else {
+                createXHR = function(){
+                    throw new Error("No XHR object available.");
+                };
+            }
+            
+            return createXHR();
+        }
+```
+
+2.匿名立即执行
+
+```javascript
+ var createXHR = (function(){
+            if (typeof XMLHttpRequest != "undefined"){
+                return function(){
+                    return new XMLHttpRequest();
+                };
+            } else if (typeof ActiveXObject != "undefined"){
+                return function(){                    
+                    if (typeof arguments.callee.activeXString != "string"){
+                        var versions = ["MSXML2.XMLHttp.6.0", "MSXML2.XMLHttp.3.0",
+                                        "MSXML2.XMLHttp"],
+                            i, len;
+                
+                        for (i=0,len=versions.length; i < len; i++){
+                            try {
+                                new ActiveXObject(versions[i]);
+                                arguments.callee.activeXString = versions[i];
+                                break;
+                            } catch (ex){
+                                //skip
+                            }
+                        }
+                    }
+                
+                    return new ActiveXObject(arguments.callee.activeXString);
+                };
+            } else {
+                return function(){
+                    throw new Error("No XHR object available.");
+                };
+            }
+        })();
+```
 
