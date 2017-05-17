@@ -847,3 +847,94 @@ if (this instanceof Polygon) {
         })();
 ```
 
+
+
+5月17日
+
+**函数绑定**
+
+有如下代码：
+
+```javascript
+var handler = {
+message: "Event handled",
+handleClick: function(event){
+alert(this.message);
+}
+};
+var btn = document.getElementById("my-btn");
+btn.AddEventListener('click',handler.handleClick)
+```
+
+给`btn`加上了一个单击事件监听，但是处理函数是`handler`对象内部的函数，涉及到`this`，在此例中，输出为`undefined`。因为`this`指向的是`btn`。
+
+
+
+为了修正这个输出，有多种方法：
+
+```javascript
+var handler = {
+msg : 'event handled',
+handleClick:function(event){
+ console.log(event,this.msg)
+}
+}
+
+function bind(fn,target){
+return function(){
+  fn.apply(target);
+}
+}
+
+test.addEventListener('click',function(event){
+handler.handleClick(event)
+})
+//闭包
+
+test.addEventListener('click',bind(handler.handleClick,handler))
+//apply/call
+
+test.addEventListener('click',handler.handleClick.bind(handler))
+//原生bind()
+
+```
+
+
+
+**函数柯里化**
+
+柯里化，据说很厉害，之前只听说过。详见https://llh911001.gitbooks.io/mostly-adequate-guide-chinese/content/ch4.html。
+
+下面这个代码是柯里化的应用：
+
+```javascript
+function curry(fn){
+            var args = Array.prototype.slice.call(arguments, 1);
+            return function(){
+                var innerArgs = Array.prototype.slice.call(arguments),
+                    finalArgs = args.concat(innerArgs);
+                return fn.apply(null, finalArgs);
+            };
+        }
+    
+        function add(num1, num2){
+            return num1 + num2;
+        }
+        
+        var curriedAdd = curry(add, 5);
+        alert(curriedAdd(3));   //8
+
+        var curriedAdd2 = curry(add, 5, 12);
+        alert(curriedAdd2());   //17
+        
+        var curriedAdd3 = curry(add, 5, 12, 18);
+        alert(curriedAdd3());   //17
+
+        var curriedAdd4 = curry(add, 5, 12);
+        alert(curriedAdd4(5));   //17
+
+        var curriedAdd5 = curry(add, 5, 12, 18);
+        alert(curriedAdd5(1));   //17
+```
+
+大概意思就是通过闭包的`apply`来将多个参数转化为单个参数。
