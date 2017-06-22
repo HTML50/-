@@ -738,7 +738,7 @@ alert(sum); //15
 
 2月18日
 
-（
+/*
 
 今天顺着一些小问题上网搜了搜。比如eval的用法，引出了一大堆新的疑问，发现自己真的是在入门阶段，随着逐层深入，理论也会越发复杂。有一些提问者就说，学习某本书的时候，有些代码看不懂。我就发现，自己不用急着实验摸索，先把书本老实学习完再说。之前也写过简单的博文，分析一下代码，现在看来，书上应该比我自己研究的更精确。以后有什么尝试，又不写文章论述了，反正有些地方自己也讲不明白，而且还有错的地方，意识到还要去修改。就借着学习笔记总结总结，就可以了。
 
@@ -746,14 +746,16 @@ alert(sum); //15
 
 ```javascript
 function test(a){
-  console.log(a === arguments[0]) //true
-  console.log(a,arguments[0])
+  console.log(a === arguments[0]);
+  console.log(a,arguments[0]);
   var a=1;
-  console.log(a,arguments[0])
+  console.log(a,arguments[0]);
 }
-  
-test(2)  //2,2
-		//1,1
+
+test(2);
+//true
+//2,2
+//1,1
 ```
 
 这说明，函数的参数变量，作用域在函数内（局部作用域），和arguments是等价的。
@@ -782,8 +784,9 @@ age:13
 }
 
 
-console.log(tom,joy)
-//Object {name: "tom", age: 13} person {name: "joy", age: 12}
+console.log(joy,tom);
+//person {name: "joy", age: 12}
+//Object {name: "tom", age: 13}
 ```
 
 两个对象大同小异。
@@ -819,7 +822,7 @@ console.log(joy)
 
 具体的细节，我相信在后面的学习中会更清楚。
 
-）
+*/
 
 
 
