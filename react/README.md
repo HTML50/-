@@ -647,7 +647,7 @@ ReactDOM.render(
 
 观察代码，可以发现。首先这是一个类的形式的component，它含有两个React的原生方法`componentDidMount()`和`componentWillUnmount()`。第二个方法清除定时器暂时还没使用。最后是`tick()`内的`setState()`方法，从字面上看这就可以看出是设定更新state的。
 
-
+​	
 
 正确使用state，有三个要点。
 
@@ -736,7 +736,7 @@ function(x){
 function(){
   return '此时没参数';
 }
-
+重新重新
 //多个参数
 (x,y) => x+y;
 //等同于
