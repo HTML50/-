@@ -19,27 +19,61 @@ var productData = [
   {category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7'}
 ];
  
+class App extends React.Component{
+  constructor(props){
+    super(props);
+    this.state ={
+      filterText:'',
+      inStock: false 
+    }
+    this.handleInput = this.handleInput.bind(this);
+    this.handleChecked = this.handleChecked.bind(this);
+  }
 
+  handleInput(filterText){
+    this.setState({
+      filterText:filterText
+    })
+  }
 
+  handleChecked(inStockOnly){
+    this.setState({
+      inStock:inStockOnly
+    })
+  }
 
-class ProductArea extends React.Component{
-render(){
-return(
-<div>
-<SearchTable />
-<ProductTable data={productData} />
-</div>
-)
+  render(){
+  return(
+    <div>
+      <SearchTable inStock={this.state.inStock} filterText={this.state.filterText}  filterTextChange={this.handleInput} onCheckedChange={this.handleChecked} />
+      <ProductTable inStock={this.state.inStock} filterText={this.state.filterText}  data={productData}/>
+    </div>
+  )
+  }
 }
-}
+
 
 class SearchTable extends React.Component{
+constructor(props){
+  super(props);
+  this.handleInput = this.handleInput.bind(this);
+  this.handleIsStockd = this.handleIsStockd.bind(this);
+}
+
+handleInput(e){
+  this.props.filterTextChange(e.target.value);
+}
+
+handleIsStockd(e){
+  this.props.onCheckedChange(e.target.checked);
+}
+
 render(){
 return(
 <div>
-<input placeholder='Search...' />
+<input placeholder='Search...' value={this.props.filterText} onChange={this.handleInput} />
 <p>
-<input type='checkbox' /> {' '}Ö»ÏÔÊ¾ÓÐ»õÉÌÆ·
+<input type='checkbox' checked={this.props.inStock} onChange={this.handleIsStockd}/> 只显示有货商品
 </p>
 </div>
 )
@@ -48,9 +82,13 @@ return(
 
 class ProductTable extends React.Component{
 render(){
-var row = [];
+var row = [],name;
 this.props.data.forEach((product) =>{
-row.push(<tr key={product.name}><td>{product.name}</td><td>{product.price}</td></tr>)
+  if(product.name.indexOf(this.props.filterText) === -1 || !product.stocked && this.props.inStock){ 
+    return;
+  }
+  name = product.stocked ? product.name : <span style={{color:'red'}}>{product.name}</span>
+  row.push(<tr key={product.name}><td>{name}</td><td>{product.price}</td></tr>);
 })
 
 return(
@@ -70,7 +108,7 @@ return(
 
 
 ReactDOM.render(
-  <ProductArea />,
+  <App />,
   document.getElementById('root')
 );
 
