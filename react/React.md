@@ -196,3 +196,44 @@ ReactDOM.render(
 ```
 
 这算是一个完整的例子，其中用到了子组件向父组件传值`this.props.fn(arg)`，写的过程中明白了状态机的含义，每当`state`改变时，组件会自动重绘UI。
+
+
+
+6月29日
+
+今天计划写一个完整的React实例：todoList。
+
+但是纠结于css的写法还有npm环境，迟迟没有动手。最主要的一个原因就是不接受变化，总试图去寻找自己熟悉的代码风格，写法。
+
+既然官方给出的例子就是这样写的：
+
+```jsx
+import React, { Component } from 'react';
+import logo from './logo.svg';
+import './App.css';
+
+class App extends Component {
+  render() {
+    return (
+      <div className="container">
+        <div className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <h2>Welcome to React</h2>
+        </div>
+        <p className="App-intro">
+          To get started, edit <code>src/App.js</code> and save to reload.
+        </p>
+      </div>
+    );
+  }
+}
+
+export default App;
+
+```
+
+那索性不如就学着这样写，然后再搞明白为什么这样写，反正自己无法用旧的知识构建出来。
+
+无非就是几个新的关键字`import`,`export`。
+
+有时候真的能被自己蠢哭。不多说了，照葫芦画瓢去了。
